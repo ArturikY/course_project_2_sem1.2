@@ -300,9 +300,22 @@
                     fromDate.setDate(fromDate.getDate() - days);
                     const from = fromDate.toISOString().split('T')[0];
                     
-                    const accidentsUrl = `api/accidents.php?bbox=${bbox}&from=${from}&limit=2000`;
+                    const accidentsUrl = `api/accidents.php?bbox=${encodeURIComponent(bbox)}&from=${from}&limit=2000`;
+                    console.log('Loading accidents from:', accidentsUrl);
+                    
                     const accidentsResponse = await fetch(accidentsUrl);
+                    
+                    if (!accidentsResponse.ok) {
+                        const errorText = await accidentsResponse.text();
+                        throw new Error(`HTTP ${accidentsResponse.status}: ${errorText}`);
+                    }
+                    
                     const accidentsData = await accidentsResponse.json();
+                    
+                    if (!accidentsData || accidentsData.type !== 'FeatureCollection') {
+                        console.error('Invalid GeoJSON:', accidentsData);
+                        throw new Error('Invalid GeoJSON object');
+                    }
                     
                     accidentsLayer.clearLayers();
                     accidentsLayer.addData(accidentsData);
@@ -314,13 +327,27 @@
                         `ДТП: ${accidentsData.features.length}`;
                 } else {
                     map.removeLayer(accidentsLayer);
+                    document.getElementById('accidentsCount').textContent = 'ДТП: 0';
                 }
                 
                 // Загрузка опасных зон
                 if (showHotspots) {
-                    const hotspotsUrl = `api/hotspots.php?bbox=${bbox}&period=${period}&threshold=${threshold}`;
+                    const hotspotsUrl = `api/hotspots.php?bbox=${encodeURIComponent(bbox)}&period=${period}&threshold=${threshold}`;
+                    console.log('Loading hotspots from:', hotspotsUrl);
+                    
                     const hotspotsResponse = await fetch(hotspotsUrl);
+                    
+                    if (!hotspotsResponse.ok) {
+                        const errorText = await hotspotsResponse.text();
+                        throw new Error(`HTTP ${hotspotsResponse.status}: ${errorText}`);
+                    }
+                    
                     const hotspotsData = await hotspotsResponse.json();
+                    
+                    if (!hotspotsData || hotspotsData.type !== 'FeatureCollection') {
+                        console.error('Invalid GeoJSON:', hotspotsData);
+                        throw new Error('Invalid GeoJSON object');
+                    }
                     
                     hotspotsLayer.clearLayers();
                     hotspotsLayer.addData(hotspotsData);
@@ -332,6 +359,7 @@
                         `Опасных зон: ${hotspotsData.features.length}`;
                 } else {
                     map.removeLayer(hotspotsLayer);
+                    document.getElementById('hotspotsCount').textContent = 'Опасных зон: 0';
                 }
                 
             } catch (error) {
@@ -351,4 +379,3 @@
     </script>
 </body>
 </html>
-

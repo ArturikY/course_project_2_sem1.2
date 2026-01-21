@@ -9,27 +9,25 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 
 require_once __DIR__ . '/db.php';
-require_once __DIR__ . '/config.php';
 
 $pdo = getDB();
-$config = require __DIR__ . '/config.php';
 
 // Параметры запроса
-$bbox = isset($_GET['bbox']) ? $_GET['bbox'] : null;
-$period = isset($_GET['period']) ? $_GET['period'] : '30d'; // 7d, 30d, 90d, 365d
-$threshold = isset($_GET['threshold']) ? (int)$_GET['threshold'] : $config['api']['hotspot_threshold'];
-$gridSize = isset($_GET['grid']) ? (int)$_GET['grid'] : $config['api']['grid_size_meters'];
+$bbox = isset($_GET['bbox']) ? trim($_GET['bbox']) : null;
+$period = isset($_GET['period']) ? trim($_GET['period']) : '30d';
+$threshold = isset($_GET['threshold']) ? (int)$_GET['threshold'] : 5;
+$gridSize = isset($_GET['grid']) ? (int)$_GET['grid'] : 250;
 
 // Валидация bbox
 if (!$bbox) {
     http_response_code(400);
-    die(json_encode(['error' => 'bbox parameter is required']));
+    die(json_encode(['error' => 'bbox parameter is required'], JSON_UNESCAPED_UNICODE));
 }
 
-$bbox_parts = explode(',', $bbox);
+$bbox_parts = array_map('trim', explode(',', $bbox));
 if (count($bbox_parts) !== 4) {
     http_response_code(400);
-    die(json_encode(['error' => 'Invalid bbox format']));
+    die(json_encode(['error' => 'Invalid bbox format'], JSON_UNESCAPED_UNICODE));
 }
 
 $minLon = (float)$bbox_parts[0];
@@ -46,8 +44,7 @@ if (preg_match('/(\d+)d/', $period, $matches)) {
 $dateFrom = date('Y-m-d', strtotime("-$days days"));
 
 try {
-    // Простой анализ по сетке: делим bbox на квадраты и считаем ДТП в каждом
-    // Размер ячейки в градусах (примерно)
+    // Простой анализ по сетке
     $latStep = $gridSize / 111000; // 1 градус ≈ 111 км
     $lonStep = $gridSize / (111000 * cos(deg2rad(($minLat + $maxLat) / 2)));
     
@@ -124,6 +121,8 @@ try {
     
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+    echo json_encode(['error' => 'Database error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE);
 }
-

@@ -13,21 +13,21 @@ require_once __DIR__ . '/db.php';
 $pdo = getDB();
 
 // Параметры запроса
-$bbox = isset($_GET['bbox']) ? $_GET['bbox'] : null;
-$from = isset($_GET['from']) ? $_GET['from'] : null;
-$to = isset($_GET['to']) ? $_GET['to'] : null;
+$bbox = isset($_GET['bbox']) ? trim($_GET['bbox']) : null;
+$from = isset($_GET['from']) ? trim($_GET['from']) : null;
+$to = isset($_GET['to']) ? trim($_GET['to']) : null;
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1000;
 
 // Валидация bbox
 if (!$bbox) {
     http_response_code(400);
-    die(json_encode(['error' => 'bbox parameter is required (format: minLon,minLat,maxLon,maxLat)']));
+    die(json_encode(['error' => 'bbox parameter is required (format: minLon,minLat,maxLon,maxLat)'], JSON_UNESCAPED_UNICODE));
 }
 
-$bbox_parts = explode(',', $bbox);
+$bbox_parts = array_map('trim', explode(',', $bbox));
 if (count($bbox_parts) !== 4) {
     http_response_code(400);
-    die(json_encode(['error' => 'Invalid bbox format. Use: minLon,minLat,maxLon,maxLat']));
+    die(json_encode(['error' => 'Invalid bbox format. Use: minLon,minLat,maxLon,maxLat'], JSON_UNESCAPED_UNICODE));
 }
 
 $minLon = (float)$bbox_parts[0];
@@ -35,17 +35,22 @@ $minLat = (float)$bbox_parts[1];
 $maxLon = (float)$bbox_parts[2];
 $maxLat = (float)$bbox_parts[3];
 
-// Проверка размера bbox
-if (($maxLon - $minLon) > 0.1 || ($maxLat - $minLat) > 0.1) {
+// Проверка валидности координат
+if ($minLon >= $maxLon || $minLat >= $maxLat) {
     http_response_code(400);
-    die(json_encode(['error' => 'Bbox too large. Maximum size: 0.1 degrees']));
+    die(json_encode(['error' => 'Invalid bbox: min must be less than max'], JSON_UNESCAPED_UNICODE));
+}
+
+// Проверка размера bbox (опционально, можно увеличить)
+if (($maxLon - $minLon) > 1.0 || ($maxLat - $minLat) > 1.0) {
+    http_response_code(400);
+    die(json_encode(['error' => 'Bbox too large. Maximum size: 1.0 degrees'], JSON_UNESCAPED_UNICODE));
 }
 
 try {
     // Построение запроса
     $sql = "SELECT 
         id, dt, lat, lon, 
-        ST_AsText(geom) as geom_text,
         category, severity, region, light, address,
         tags, weather, nearby, vehicles
     FROM accidents
@@ -74,10 +79,8 @@ try {
     // Формируем GeoJSON
     $features = [];
     foreach ($results as $row) {
-        // Парсим координаты из geom_text (POINT(lon lat))
-        preg_match('/POINT\(([\d.]+) ([\d.]+)\)/', $row['geom_text'], $matches);
-        $lon = isset($matches[1]) ? (float)$matches[1] : $row['lon'];
-        $lat = isset($matches[2]) ? (float)$matches[2] : $row['lat'];
+        $lon = (float)$row['lon'];
+        $lat = (float)$row['lat'];
         
         $feature = [
             'type' => 'Feature',
@@ -110,6 +113,8 @@ try {
     
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+    echo json_encode(['error' => 'Database error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE);
 }
-

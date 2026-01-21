@@ -3,27 +3,29 @@
  * Подключение к базе данных
  */
 
-require_once __DIR__ . '/config.php';
-
-$config = require __DIR__ . '/config.php';
-
 function getDB() {
-    global $config;
     static $pdo = null;
     
     if ($pdo === null) {
+        $config = [
+            'host' => 'localhost',
+            'dbname' => 'dtp_analysis',
+            'user' => 'root',
+            'pass' => '',
+            'charset' => 'utf8mb4'
+        ];
+        
         try {
-            $dsn = "mysql:host={$config['database']['host']};dbname={$config['database']['dbname']};charset={$config['database']['charset']}";
-            $pdo = new PDO($dsn, $config['database']['user'], $config['database']['pass'], [
+            $dsn = "mysql:host={$config['host']};dbname={$config['dbname']};charset={$config['charset']}";
+            $pdo = new PDO($dsn, $config['user'], $config['pass'], [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             ]);
         } catch (PDOException $e) {
             http_response_code(500);
-            die(json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]));
+            die(json_encode(['error' => 'Database connection failed: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE));
         }
     }
     
     return $pdo;
 }
-
