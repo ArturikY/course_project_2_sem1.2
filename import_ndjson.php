@@ -86,7 +86,7 @@ if (file_exists($schema_file)) {
 }
 
 // Настройки импорта
-$batchSize = 100; // Уменьшено из-за больших JSON полей
+$batchSize = 20; // Очень маленький батч из-за ограничений max_allowed_packet
 $rows = [];
 $total = 0;
 $errors = 0;
@@ -164,8 +164,9 @@ while (($line = fgets($handle)) !== false) {
     $vehicles = isset($props['vehicles']) && is_array($props['vehicles']) 
         ? json_encode($props['vehicles'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : null;
     
-    // Все остальные поля в extra
-    $extra = json_encode($props, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    // Поле extra убрано - оно слишком большое и дублирует данные
+    // Все важные поля уже извлечены отдельно
+    $extra = null;
     
     $rows[] = [
         $id, $dt, $lat, $lon, $category, $severity, $region, $light, $address,
@@ -211,7 +212,7 @@ function insertBatch(&$pdo, array $rows, $db_config, $db_name) {
     if (empty($rows)) return 0;
     
     // Если батч слишком большой, разбиваем пополам
-    if (count($rows) > 200) {
+    if (count($rows) > 50) {
         $mid = (int)(count($rows) / 2);
         $first = array_slice($rows, 0, $mid);
         $second = array_slice($rows, $mid);
@@ -278,19 +279,15 @@ function insertBatch(&$pdo, array $rows, $db_config, $db_name) {
             // Ошибка размера пакета - разбиваем батч пополам
             if (strpos($errorMsg, 'max_allowed_packet') !== false || 
                 strpos($errorMsg, 'packet bigger') !== false) {
-                if (count($rows) > 10) {
+                if (count($rows) > 1) {
                     $mid = (int)(count($rows) / 2);
                     $first = array_slice($rows, 0, $mid);
                     $second = array_slice($rows, $mid);
                     return insertBatch($pdo, $first, $db_config, $db_name) + 
                            insertBatch($pdo, $second, $db_config, $db_name);
                 } else {
-                    // Если даже 10 записей не влезают, вставляем по одной
-                    $inserted = 0;
-                    foreach ($rows as $singleRow) {
-                        $inserted += insertBatch($pdo, [$singleRow], $db_config, $db_name);
-                    }
-                    return $inserted;
+                    // Если даже 1 запись не влезает, пробуем вставить без extra
+                    return insertSingle($pdo, $rows[0], $db_config, $db_name);
                 }
             }
             
@@ -315,5 +312,53 @@ function insertBatch(&$pdo, array $rows, $db_config, $db_name) {
     }
     
     return 0;
+}
+
+/**
+ * Вставка одной записи (fallback при ошибках)
+ */
+function insertSingle(&$pdo, array $row, $db_config, $db_name) {
+    [$id, $dt, $lat, $lon, $category, $severity, $region, $light, $address,
+     $tags, $weather, $nearby, $vehicles, $extra] = $row;
+    
+    $sql = "INSERT INTO accidents
+        (id, dt, lat, lon, category, severity, region, light, address, tags, weather, nearby, vehicles, extra, geom)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,ST_SRID(POINT(?, ?), 4326))
+        ON DUPLICATE KEY UPDATE 
+            dt=VALUES(dt), 
+            category=VALUES(category), 
+            severity=VALUES(severity), 
+            region=VALUES(region), 
+            light=VALUES(light), 
+            address=VALUES(address), 
+            tags=VALUES(tags), 
+            weather=VALUES(weather), 
+            nearby=VALUES(nearby), 
+            vehicles=VALUES(vehicles), 
+            extra=VALUES(extra), 
+            geom=VALUES(geom)";
+    
+    $params = [
+        $id, $dt, $lat, $lon, $category, $severity, $region, $light, $address,
+        $tags, $weather, $nearby, $vehicles, $extra,
+        $lon, $lat
+    ];
+    
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        return 1;
+    } catch (PDOException $e) {
+        // При ошибке переподключаемся и пробуем еще раз
+        try {
+            $pdo = getPDO($db_config, $db_name);
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($params);
+            return 1;
+        } catch (PDOException $e2) {
+            echo "Ошибка вставки записи ID $id: " . $e2->getMessage() . "\n";
+            return 0;
+        }
+    }
 }
 
