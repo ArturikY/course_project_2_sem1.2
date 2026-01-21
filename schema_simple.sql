@@ -1,4 +1,4 @@
--- Упрощенная версия схемы для phpMyAdmin (без комментариев в колонках)
+-- Упрощенная версия схемы для phpMyAdmin
 
 CREATE TABLE IF NOT EXISTS accidents (
   id BIGINT PRIMARY KEY,
@@ -33,8 +33,7 @@ CREATE TABLE IF NOT EXISTS grid_stats (
   accident_count INT DEFAULT 0,
   severe_count INT DEFAULT 0,
   fatal_count INT DEFAULT 0,
-  last_updated DATETIME NULL,
-  SPATIAL INDEX idx_geom (geom)
+  last_updated DATETIME NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE OR REPLACE VIEW accidents_recent AS
@@ -42,4 +41,3 @@ SELECT
   id, dt, lat, lon, geom, category, severity, region, light, address
 FROM accidents
 WHERE dt >= DATE_SUB(NOW(), INTERVAL 90 DAY);
-
