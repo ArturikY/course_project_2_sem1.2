@@ -227,7 +227,9 @@ function insertBatch(&$pdo, array $rows, $db_config, $db_name) {
         [$id, $dt, $lat, $lon, $category, $severity, $region, $light, $address,
          $tags, $weather, $nearby, $vehicles, $extra] = $row;
         
-        $placeholders[] = "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,ST_SRID(POINT(?, ?), 4326))";
+        // Используем ST_GeomFromText для совместимости с MariaDB/старыми версиями MySQL
+        $point_wkt = "POINT($lon $lat)";
+        $placeholders[] = "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,ST_GeomFromText(?, 4326))";
         
         $params[] = $id;
         $params[] = $dt;
@@ -243,8 +245,7 @@ function insertBatch(&$pdo, array $rows, $db_config, $db_name) {
         $params[] = $nearby;
         $params[] = $vehicles;
         $params[] = $extra;
-        $params[] = $lon; // POINT(lon, lat) - порядок важен!
-        $params[] = $lat;
+        $params[] = $point_wkt; // WKT строка "POINT(lon lat)"
     }
     
     $sql = "INSERT INTO accidents
@@ -321,9 +322,12 @@ function insertSingle(&$pdo, array $row, $db_config, $db_name) {
     [$id, $dt, $lat, $lon, $category, $severity, $region, $light, $address,
      $tags, $weather, $nearby, $vehicles, $extra] = $row;
     
+    // Формируем WKT строку для POINT
+    $point_wkt = "POINT($lon $lat)";
+    
     $sql = "INSERT INTO accidents
         (id, dt, lat, lon, category, severity, region, light, address, tags, weather, nearby, vehicles, extra, geom)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,ST_SRID(POINT(?, ?), 4326))
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,ST_GeomFromText(?, 4326))
         ON DUPLICATE KEY UPDATE 
             dt=VALUES(dt), 
             category=VALUES(category), 
@@ -341,7 +345,7 @@ function insertSingle(&$pdo, array $row, $db_config, $db_name) {
     $params = [
         $id, $dt, $lat, $lon, $category, $severity, $region, $light, $address,
         $tags, $weather, $nearby, $vehicles, $extra,
-        $lon, $lat
+        $point_wkt  // WKT строка
     ];
     
     try {

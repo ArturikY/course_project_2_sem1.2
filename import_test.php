@@ -40,13 +40,6 @@ try {
     ]);
     $pdo->exec("USE `$db_name`");
     
-    // Увеличиваем max_allowed_packet для сессии
-    try {
-        $pdo->exec("SET SESSION max_allowed_packet = 67108864"); // 64MB
-    } catch (PDOException $e) {
-        // Игнорируем если нет прав
-    }
-    
     echo "Подключение к БД успешно\n";
 } catch (PDOException $e) {
     die("Ошибка подключения к БД: " . $e->getMessage() . "\n");
@@ -92,10 +85,10 @@ echo "Начало импорта (первые $limit записей)...\n\n";
 $line_num = 0;
 $inserted_count = 0;
 
-// Подготовленный запрос для одной записи
+// Подготовленный запрос - используем ST_GeomFromText для совместимости
 $sql = "INSERT INTO accidents
     (id, dt, lat, lon, category, severity, region, light, address, tags, weather, nearby, vehicles, extra, geom)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,ST_SRID(POINT(?, ?), 4326))
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,ST_GeomFromText(?, 4326))
     ON DUPLICATE KEY UPDATE 
         dt=VALUES(dt), 
         category=VALUES(category), 
@@ -177,12 +170,15 @@ while (($line = fgets($handle)) !== false && $inserted_count < $limit) {
     // Поле extra = NULL (убрано для уменьшения размера)
     $extra = null;
     
+    // Формируем WKT строку для POINT: "POINT(lon lat)"
+    $point_wkt = "POINT($lon $lat)";
+    
     // Вставка одной записи
     try {
         $params = [
             $id, $dt, $lat, $lon, $category, $severity, $region, $light, $address,
             $tags, $weather, $nearby, $vehicles, $extra,
-            $lon, $lat
+            $point_wkt  // WKT строка для ST_GeomFromText
         ];
         
         $stmt->execute($params);
@@ -233,4 +229,3 @@ if ($total > 0) {
         echo "Ошибка проверки: " . $e->getMessage() . "\n";
     }
 }
-
