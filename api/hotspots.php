@@ -79,11 +79,16 @@ try {
                 $centerLon = ($cellMinLon + $cellMaxLon) / 2;
                 
                 // Определяем уровень опасности
+                // Низкий: 5-9 ДТП (зеленый)
+                // Средний: 10-19 ДТП (оранжевый/желтый)
+                // Высокий: 20+ ДТП (красный)
                 $riskLevel = 'low';
                 if ($count >= 20) {
                     $riskLevel = 'high';
                 } elseif ($count >= 10) {
                     $riskLevel = 'medium';
+                } else {
+                    $riskLevel = 'low'; // 5-9 ДТП
                 }
                 
                 $cells[] = [

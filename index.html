@@ -98,7 +98,9 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             z-index: 1000;
-            min-width: 200px;
+            min-width: 220px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         
         .legend h3 {
@@ -199,16 +201,20 @@
         <div class="legend">
             <h3>Уровень опасности</h3>
             <div class="legend-item">
-                <div class="legend-color" style="background: #2ecc71;"></div>
-                <span>Низкий (5-9 ДТП)</span>
+                <div class="legend-color" style="background: #2ecc71; border: 2px solid #27ae60;"></div>
+                <span><strong>Низкий</strong> (5-9 ДТП)</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: #f39c12;"></div>
-                <span>Средний (10-19 ДТП)</span>
+                <div class="legend-color" style="background: #f39c12; border: 2px solid #e67e22;"></div>
+                <span><strong>Средний</strong> (10-19 ДТП)</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: #e74c3c;"></div>
-                <span>Высокий (20+ ДТП)</span>
+                <div class="legend-color" style="background: #e74c3c; border: 2px solid #c0392b;"></div>
+                <span><strong>Высокий</strong> (20+ ДТП)</span>
+            </div>
+            <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #ddd; font-size: 0.85rem; color: #666;">
+                <div>🔴 Красные точки = отдельные ДТП</div>
+                <div>📊 Цветные зоны = опасные участки</div>
             </div>
         </div>
     </div>
