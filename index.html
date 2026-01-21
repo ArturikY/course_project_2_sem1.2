@@ -16,72 +16,160 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             height: 100vh;
             display: flex;
-            flex-direction: column;
+            background: #f5f5f5;
+            overflow: hidden;
         }
         
-        .header {
-            background: #2c3e50;
+        /* Боковая панель */
+        .sidebar {
+            width: 320px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .controls {
+            padding: 2rem;
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            align-items: center;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        
+        .sidebar h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .sidebar .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .control-section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .control-section h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
         }
         
         .control-group {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .control-group:last-child {
+            margin-bottom: 0;
         }
         
         .control-group label {
-            font-size: 0.9rem;
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.95;
         }
         
         .control-group select,
-        .control-group input {
-            padding: 0.4rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        .control-group input[type="number"] {
+            width: 100%;
+            padding: 0.7rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
             font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-group select option {
+            background: #667eea;
+            color: white;
+        }
+        
+        .control-group input[type="number"] {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .control-group input[type="number"]::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
         }
         
         .btn {
-            padding: 0.5rem 1rem;
-            background: #3498db;
+            width: 100%;
+            padding: 0.9rem;
+            background: rgba(255, 255, 255, 0.25);
             color: white;
-            border: none;
-            border-radius: 4px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
         }
         
         .btn:hover {
-            background: #2980b9;
+            background: rgba(255, 255, 255, 0.35);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
         }
         
-        .btn:disabled {
-            background: #95a5a6;
-            cursor: not-allowed;
+        .btn:active {
+            transform: translateY(0);
         }
         
+        /* Статистика */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        /* Карта */
         .map-container {
             flex: 1;
             position: relative;
+            background: #e0e0e0;
         }
         
         #map {
@@ -89,132 +177,211 @@
             height: 100%;
         }
         
+        /* Легенда на карте */
         .legend {
             position: absolute;
             bottom: 20px;
             right: 20px;
             background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            padding: 1.2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             z-index: 1000;
             min-width: 220px;
-            max-height: 80vh;
-            overflow-y: auto;
+            backdrop-filter: blur(10px);
         }
         
         .legend h3 {
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             font-size: 1rem;
+            color: #333;
+            font-weight: 600;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin: 0.3rem 0;
+            gap: 0.8rem;
+            margin: 0.5rem 0;
         }
         
         .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid rgba(0,0,0,0.1);
+            flex-shrink: 0;
         }
         
+        .legend-item span {
+            font-size: 0.85rem;
+            color: #555;
+        }
+        
+        /* Загрузка */
         .loading {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background: white;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            padding: 2rem 3rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
             z-index: 2000;
             display: none;
+            text-align: center;
         }
         
         .loading.active {
             display: block;
         }
         
-        .stats {
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        /* Информационная панель */
+        .info-panel {
             position: absolute;
             top: 20px;
             left: 20px;
             background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             z-index: 1000;
             font-size: 0.9rem;
+            max-width: 300px;
+            backdrop-filter: blur(10px);
         }
         
-        .stats-item {
-            margin: 0.3rem 0;
+        .info-panel h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .info-panel p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.85rem;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+            }
+            
+            body {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🚗 Анализ ДТП в Москве</h1>
-        <div class="controls">
+    <!-- Боковая панель -->
+    <div class="sidebar">
+        <h1>🚗 Анализ ДТП</h1>
+        <p class="subtitle">Москва • Визуализация и статистика</p>
+        
+        <div class="control-section">
+            <h3>⚙️ Настройки фильтров</h3>
+            
             <div class="control-group">
-                <label>Период:</label>
+                <label>Период анализа</label>
                 <select id="period">
-                    <option value="7d">7 дней</option>
-                    <option value="30d" selected>30 дней</option>
-                    <option value="90d">90 дней</option>
-                    <option value="365d">Год</option>
+                    <option value="7d">Последние 7 дней</option>
+                    <option value="30d" selected>Последние 30 дней</option>
+                    <option value="90d">Последние 90 дней</option>
+                    <option value="365d">Последний год</option>
+                    <option value="all">Все данные</option>
                 </select>
             </div>
+            
             <div class="control-group">
-                <label>Порог опасности:</label>
-                <input type="number" id="threshold" value="5" min="1" max="50" style="width: 60px;">
+                <label>Порог опасности (мин. ДТП в зоне)</label>
+                <input type="number" id="threshold" value="5" min="1" max="50">
             </div>
-            <div class="control-group">
-                <label>
-                    <input type="checkbox" id="showAccidents" checked> Показать ДТП
-                </label>
+        </div>
+        
+        <div class="control-section">
+            <h3>👁️ Отображение</h3>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="showAccidents" checked>
+                <label for="showAccidents">Показать точки ДТП</label>
             </div>
-            <div class="control-group">
-                <label>
-                    <input type="checkbox" id="showHotspots" checked> Показать опасные зоны
-                </label>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="showHotspots" checked>
+                <label for="showHotspots">Показать опасные зоны</label>
             </div>
-            <button class="btn" onclick="loadData()">Обновить</button>
+        </div>
+        
+        <button class="btn" onclick="loadData()">🔄 Обновить данные</button>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="accidentsCount">0</div>
+                <div class="stat-label">ДТП</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="hotspotsCount">0</div>
+                <div class="stat-label">Опасных зон</div>
+            </div>
         </div>
     </div>
     
+    <!-- Карта -->
     <div class="map-container">
         <div id="map"></div>
         
-        <div class="loading" id="loading">Загрузка данных...</div>
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Загрузка данных...</div>
+        </div>
         
-        <div class="stats" id="stats">
-            <div class="stats-item"><strong>Статистика</strong></div>
-            <div class="stats-item" id="accidentsCount">ДТП: 0</div>
-            <div class="stats-item" id="hotspotsCount">Опасных зон: 0</div>
+        <div class="info-panel">
+            <h4>ℹ️ Информация</h4>
+            <p>Используйте карту для навигации. Кликните на точку или зону для подробной информации.</p>
         </div>
         
         <div class="legend">
-            <h3>Уровень опасности</h3>
+            <h3>🎨 Уровень опасности</h3>
             <div class="legend-item">
-                <div class="legend-color" style="background: #000000; border: 2px solid #333;"></div>
-                <span><strong>Низкий</strong> (5-9 ДТП) - ЧЕРНЫЙ</span>
+                <div class="legend-color" style="background: #000000;"></div>
+                <span><strong>Низкий</strong> (5-9 ДТП)</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: #f39c12; border: 2px solid #e67e22;"></div>
+                <div class="legend-color" style="background: #f39c12;"></div>
                 <span><strong>Средний</strong> (10-19 ДТП)</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: #e74c3c; border: 2px solid #c0392b;"></div>
+                <div class="legend-color" style="background: #e74c3c;"></div>
                 <span><strong>Высокий</strong> (20+ ДТП)</span>
             </div>
-            <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #ddd; font-size: 0.85rem; color: #666;">
-                <div>🔴 Красные точки = отдельные ДТП</div>
-                <div>📊 Цветные зоны = опасные участки</div>
+            <div style="margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid #eee; font-size: 0.75rem; color: #999;">
+                🔴 Красные точки = отдельные ДТП
             </div>
         </div>
     </div>
@@ -226,7 +393,7 @@
         // Инициализация карты (центр Москвы)
         const map = L.map('map').setView([55.7558, 37.6173], 11);
         
-        // Добавляем тайлы OpenStreetMap
+        // Добавляем тайлы OpenStreetMap (бесплатные)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors',
             maxZoom: 19
@@ -236,23 +403,25 @@
         let accidentsLayer = L.geoJSON(null, {
             pointToLayer: function(feature, latlng) {
                 return L.circleMarker(latlng, {
-                    radius: 4,
+                    radius: 5,
                     fillColor: '#e74c3c',
                     color: '#c0392b',
-                    weight: 1,
-                    opacity: 0.8,
-                    fillOpacity: 0.6
+                    weight: 2,
+                    opacity: 0.9,
+                    fillOpacity: 0.7
                 });
             },
             onEachFeature: function(feature, layer) {
                 const props = feature.properties;
                 const popup = `
-                    <strong>ДТП #${props.id}</strong><br>
-                    Дата: ${props.dt || 'Не указана'}<br>
-                    Категория: ${props.category || 'Не указана'}<br>
-                    Тяжесть: ${props.severity || 'Не указана'}<br>
-                    Район: ${props.region || 'Не указан'}<br>
-                    ${props.address ? `Адрес: ${props.address}<br>` : ''}
+                    <div style="font-family: 'Segoe UI', sans-serif; min-width: 200px;">
+                        <h3 style="margin: 0 0 0.5rem 0; color: #667eea;">ДТП #${props.id}</h3>
+                        <p style="margin: 0.3rem 0;"><strong>Дата:</strong> ${props.dt || 'Не указана'}</p>
+                        <p style="margin: 0.3rem 0;"><strong>Категория:</strong> ${props.category || 'Не указана'}</p>
+                        <p style="margin: 0.3rem 0;"><strong>Тяжесть:</strong> ${props.severity || 'Не указана'}</p>
+                        <p style="margin: 0.3rem 0;"><strong>Район:</strong> ${props.region || 'Не указан'}</p>
+                        ${props.address ? `<p style="margin: 0.3rem 0;"><strong>Адрес:</strong> ${props.address}</p>` : ''}
+                    </div>
                 `;
                 layer.bindPopup(popup);
             }
@@ -262,25 +431,27 @@
             style: function(feature) {
                 const risk = feature.properties.risk_level;
                 const colors = {
-                    'low': '#000000',      // ЧЕРНЫЙ для низкого риска
-                    'medium': '#f39c12',   // Оранжевый для среднего
-                    'high': '#e74c3c'      // Красный для высокого
+                    'low': '#000000',
+                    'medium': '#f39c12',
+                    'high': '#e74c3c'
                 };
                 return {
                     fillColor: colors[risk] || '#95a5a6',
                     color: '#fff',
                     weight: 2,
                     opacity: 0.9,
-                    fillOpacity: risk === 'low' ? 0.7 : 0.4  // Черные зоны более заметны
+                    fillOpacity: risk === 'low' ? 0.7 : 0.4
                 };
             },
             onEachFeature: function(feature, layer) {
                 const props = feature.properties;
                 const popup = `
-                    <strong>Опасная зона</strong><br>
-                    ДТП: ${props.count}<br>
-                    Тяжелых: ${props.severe_count}<br>
-                    Уровень: ${props.risk_level}
+                    <div style="font-family: 'Segoe UI', sans-serif; min-width: 200px;">
+                        <h3 style="margin: 0 0 0.5rem 0; color: #667eea;">Опасная зона</h3>
+                        <p style="margin: 0.3rem 0;"><strong>ДТП:</strong> ${props.count}</p>
+                        <p style="margin: 0.3rem 0;"><strong>Тяжелых:</strong> ${props.severe_count}</p>
+                        <p style="margin: 0.3rem 0;"><strong>Уровень:</strong> ${props.risk_level}</p>
+                    </div>
                 `;
                 layer.bindPopup(popup);
             }
@@ -302,8 +473,6 @@
             console.log('Bbox:', bbox);
             console.log('Period:', period);
             console.log('Threshold:', threshold);
-            console.log('Show Accidents:', showAccidents);
-            console.log('Show Hotspots:', showHotspots);
             
             let accidentsCount = 0;
             let hotspotsCount = 0;
@@ -311,53 +480,36 @@
             try {
                 // Загрузка ДТП
                 if (showAccidents) {
-                    // НЕ используем фильтр по дате, так как данные за 2023 год
-                    // Просто загружаем все ДТП в видимой области
-                    const accidentsUrl = `api/accidents.php?bbox=${encodeURIComponent(bbox)}&limit=2000`;
+                    const accidentsUrl = period === 'all' 
+                        ? `api/accidents.php?bbox=${encodeURIComponent(bbox)}&limit=2000`
+                        : `api/accidents.php?bbox=${encodeURIComponent(bbox)}&limit=2000`;
+                    
                     console.log('📡 Запрос ДТП:', accidentsUrl);
                     
                     const accidentsResponse = await fetch(accidentsUrl);
-                    console.log('📥 Ответ ДТП - Status:', accidentsResponse.status, accidentsResponse.statusText);
+                    console.log('📥 Ответ ДТП - Status:', accidentsResponse.status);
                     
                     if (!accidentsResponse.ok) {
                         const errorText = await accidentsResponse.text();
-                        console.error('❌ Ошибка ДТП:', errorText);
                         throw new Error(`HTTP ${accidentsResponse.status}: ${errorText}`);
                     }
                     
                     const accidentsData = await accidentsResponse.json();
-                    console.log('📊 Данные ДТП получены:', {
-                        type: accidentsData.type,
-                        featuresCount: accidentsData.features ? accidentsData.features.length : 0,
-                        firstFeature: accidentsData.features && accidentsData.features[0] ? accidentsData.features[0] : null
-                    });
-                    
-                    if (!accidentsData || accidentsData.type !== 'FeatureCollection') {
-                        console.error('❌ Невалидный GeoJSON:', accidentsData);
-                        throw new Error('Invalid GeoJSON object');
-                    }
-                    
-                    accidentsCount = accidentsData.features.length;
+                    accidentsCount = accidentsData.features ? accidentsData.features.length : 0;
                     console.log('✅ ДТП для отображения:', accidentsCount);
                     
-                    // Очищаем старые данные
                     map.removeLayer(accidentsLayer);
                     accidentsLayer.clearLayers();
                     
-                    // Добавляем новые данные
                     if (accidentsCount > 0) {
                         accidentsLayer.addData(accidentsData);
                         accidentsLayer.addTo(map);
-                        console.log('✅ Слой ДТП добавлен на карту');
-                    } else {
-                        console.log('⚠️ Нет ДТП для отображения');
                     }
                     
-                    document.getElementById('accidentsCount').textContent = `ДТП: ${accidentsCount}`;
+                    document.getElementById('accidentsCount').textContent = accidentsCount;
                 } else {
                     map.removeLayer(accidentsLayer);
-                    document.getElementById('accidentsCount').textContent = 'ДТП: 0';
-                    console.log('⏭️ Слой ДТП отключен');
+                    document.getElementById('accidentsCount').textContent = '0';
                 }
                 
                 // Загрузка опасных зон
@@ -366,64 +518,35 @@
                     console.log('📡 Запрос опасных зон:', hotspotsUrl);
                     
                     const hotspotsResponse = await fetch(hotspotsUrl);
-                    console.log('📥 Ответ зон - Status:', hotspotsResponse.status, hotspotsResponse.statusText);
                     
                     if (!hotspotsResponse.ok) {
                         const errorText = await hotspotsResponse.text();
-                        console.error('❌ Ошибка зон:', errorText);
                         throw new Error(`HTTP ${hotspotsResponse.status}: ${errorText}`);
                     }
                     
                     const hotspotsData = await hotspotsResponse.json();
-                    console.log('📊 Данные зон получены:', {
-                        type: hotspotsData.type,
-                        featuresCount: hotspotsData.features ? hotspotsData.features.length : 0,
-                        firstFeature: hotspotsData.features && hotspotsData.features[0] ? hotspotsData.features[0] : null
-                    });
-                    
-                    if (!hotspotsData || hotspotsData.type !== 'FeatureCollection') {
-                        console.error('❌ Невалидный GeoJSON:', hotspotsData);
-                        throw new Error('Invalid GeoJSON object');
-                    }
-                    
-                    hotspotsCount = hotspotsData.features.length;
+                    hotspotsCount = hotspotsData.features ? hotspotsData.features.length : 0;
                     console.log('✅ Опасных зон для отображения:', hotspotsCount);
                     
-                    // Очищаем старые данные
                     map.removeLayer(hotspotsLayer);
                     hotspotsLayer.clearLayers();
                     
-                    // Добавляем новые данные
                     if (hotspotsCount > 0) {
                         hotspotsLayer.addData(hotspotsData);
                         hotspotsLayer.addTo(map);
-                        console.log('✅ Слой опасных зон добавлен на карту');
-                        
-                        // Логируем распределение по уровням
-                        const riskLevels = hotspotsData.features.reduce((acc, f) => {
-                            const level = f.properties.risk_level;
-                            acc[level] = (acc[level] || 0) + 1;
-                            return acc;
-                        }, {});
-                        console.log('📈 Распределение по уровням:', riskLevels);
-                    } else {
-                        console.log('⚠️ Нет опасных зон для отображения');
                     }
                     
-                    document.getElementById('hotspotsCount').textContent = `Опасных зон: ${hotspotsCount}`;
+                    document.getElementById('hotspotsCount').textContent = hotspotsCount;
                 } else {
                     map.removeLayer(hotspotsLayer);
-                    document.getElementById('hotspotsCount').textContent = 'Опасных зон: 0';
-                    console.log('⏭️ Слой опасных зон отключен');
+                    document.getElementById('hotspotsCount').textContent = '0';
                 }
                 
                 console.log('=== ЗАГРУЗКА ЗАВЕРШЕНА ===');
-                console.log('Итого - ДТП:', accidentsCount, '| Опасных зон:', hotspotsCount);
                 
             } catch (error) {
                 console.error('❌ КРИТИЧЕСКАЯ ОШИБКА:', error);
-                console.error('Stack:', error.stack);
-                alert('Ошибка загрузки данных: ' + error.message + '\n\nОткройте консоль (F12) для подробностей');
+                alert('Ошибка загрузки данных: ' + error.message);
             } finally {
                 loading.classList.remove('active');
             }
