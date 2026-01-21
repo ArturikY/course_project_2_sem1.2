@@ -24,17 +24,34 @@ if (!file_exists($ndjson_file)) {
 echo "Импорт данных из: $ndjson_file\n";
 echo "База данных: $db_name\n\n";
 
-// Подключение к MySQL
-try {
+// Функция для получения PDO соединения
+function getPDO($db_config, $db_name) {
     $dsn = "mysql:host={$db_config['host']};charset={$db_config['charset']}";
     $pdo = new PDO($dsn, $db_config['user'], $db_config['pass'], [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::MYSQL_ATTR_LOCAL_INFILE => true,
     ]);
-    
-    // Создание БД если не существует
-    $pdo->exec("CREATE DATABASE IF NOT EXISTS `$db_name` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     $pdo->exec("USE `$db_name`");
+    // Увеличиваем max_allowed_packet для сессии
+    try {
+        $pdo->exec("SET SESSION max_allowed_packet = 67108864"); // 64MB
+    } catch (PDOException $e) {
+        // Игнорируем если нет прав
+    }
+    return $pdo;
+}
+
+// Подключение к MySQL
+try {
+    // Создание БД если не существует
+    $dsn = "mysql:host={$db_config['host']};charset={$db_config['charset']}";
+    $pdo_temp = new PDO($dsn, $db_config['user'], $db_config['pass'], [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    ]);
+    $pdo_temp->exec("CREATE DATABASE IF NOT EXISTS `$db_name` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+    
+    // Подключение к БД
+    $pdo = getPDO($db_config, $db_name);
     
     echo "Подключение к БД успешно\n";
 } catch (PDOException $e) {
@@ -69,7 +86,7 @@ if (file_exists($schema_file)) {
 }
 
 // Настройки импорта
-$batchSize = 1000;
+$batchSize = 100; // Уменьшено из-за больших JSON полей
 $rows = [];
 $total = 0;
 $errors = 0;
@@ -157,11 +174,11 @@ while (($line = fgets($handle)) !== false) {
     
     // Batch insert
     if (count($rows) >= $batchSize) {
-        $inserted = insertBatch($pdo, $rows);
+        $inserted = insertBatch($pdo, $rows, $db_config, $db_name);
         $total += $inserted;
         $rows = [];
         
-        if ($total % 10000 == 0) {
+        if ($total % 1000 == 0) {
             $elapsed = microtime(true) - $start_time;
             $rate = $total / $elapsed;
             echo sprintf("Обработано: %d записей (%.1f зап/сек)\n", $total, $rate);
@@ -171,7 +188,7 @@ while (($line = fgets($handle)) !== false) {
 
 // Остаток
 if (!empty($rows)) {
-    $inserted = insertBatch($pdo, $rows);
+    $inserted = insertBatch($pdo, $rows, $db_config, $db_name);
     $total += $inserted;
 }
 
@@ -188,10 +205,19 @@ echo "Скорость: " . round($total / $elapsed, 1) . " записей/се�
 echo "========================================\n";
 
 /**
- * Batch insert в БД
+ * Batch insert в БД с обработкой ошибок и переподключением
  */
-function insertBatch(PDO $pdo, array $rows) {
+function insertBatch(&$pdo, array $rows, $db_config, $db_name) {
     if (empty($rows)) return 0;
+    
+    // Если батч слишком большой, разбиваем пополам
+    if (count($rows) > 200) {
+        $mid = (int)(count($rows) / 2);
+        $first = array_slice($rows, 0, $mid);
+        $second = array_slice($rows, $mid);
+        return insertBatch($pdo, $first, $db_config, $db_name) + 
+               insertBatch($pdo, $second, $db_config, $db_name);
+    }
     
     $placeholders = [];
     $params = [];
@@ -237,13 +263,57 @@ function insertBatch(PDO $pdo, array $rows) {
             extra=VALUES(extra), 
             geom=VALUES(geom)";
     
-    try {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        return count($rows);
-    } catch (PDOException $e) {
-        echo "Ошибка batch insert: " . $e->getMessage() . "\n";
-        return 0;
+    $maxRetries = 3;
+    $retry = 0;
+    
+    while ($retry < $maxRetries) {
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($params);
+            return count($rows);
+        } catch (PDOException $e) {
+            $errorMsg = $e->getMessage();
+            $errorCode = $e->getCode();
+            
+            // Ошибка размера пакета - разбиваем батч пополам
+            if (strpos($errorMsg, 'max_allowed_packet') !== false || 
+                strpos($errorMsg, 'packet bigger') !== false) {
+                if (count($rows) > 10) {
+                    $mid = (int)(count($rows) / 2);
+                    $first = array_slice($rows, 0, $mid);
+                    $second = array_slice($rows, $mid);
+                    return insertBatch($pdo, $first, $db_config, $db_name) + 
+                           insertBatch($pdo, $second, $db_config, $db_name);
+                } else {
+                    // Если даже 10 записей не влезают, вставляем по одной
+                    $inserted = 0;
+                    foreach ($rows as $singleRow) {
+                        $inserted += insertBatch($pdo, [$singleRow], $db_config, $db_name);
+                    }
+                    return $inserted;
+                }
+            }
+            
+            // Ошибка "MySQL server has gone away" - переподключаемся
+            if (strpos($errorMsg, 'gone away') !== false || 
+                strpos($errorMsg, 'Communication link failure') !== false ||
+                $errorCode == 2006 || $errorCode == '08S01') {
+                $retry++;
+                if ($retry < $maxRetries) {
+                    echo "Переподключение к БД (попытка $retry/$maxRetries)...\n";
+                    $pdo = getPDO($db_config, $db_name);
+                    continue;
+                }
+            }
+            
+            // Другие ошибки - выводим и возвращаем 0
+            if ($retry == 0) {
+                echo "Ошибка batch insert: $errorMsg\n";
+            }
+            return 0;
+        }
     }
+    
+    return 0;
 }
 
