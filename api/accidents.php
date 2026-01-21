@@ -69,8 +69,10 @@ try {
         $params[] = $to . ' 23:59:59';
     }
     
-    $sql .= " ORDER BY dt DESC LIMIT ?";
-    $params[] = $limit;
+    // LIMIT нельзя использовать как параметр в prepared statements в MariaDB
+    // Используем прямое значение, но проверяем его безопасность
+    $limit = max(1, min(10000, (int)$limit)); // Ограничиваем от 1 до 10000
+    $sql .= " ORDER BY dt DESC LIMIT " . $limit;
     
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
