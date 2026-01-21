@@ -4,9 +4,19 @@
  * GET /api/accidents.php?bbox=minLon,minLat,maxLon,maxLat&from=YYYY-MM-DD&to=YYYY-MM-DD
  */
 
+// Отключаем вывод ошибок в HTML формате
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
+
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
+
+// Обработка ошибок
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    http_response_code(500);
+    die(json_encode(['error' => "PHP Error: $errstr in $errfile:$errline"], JSON_UNESCAPED_UNICODE));
+});
 
 require_once __DIR__ . '/db.php';
 
@@ -16,6 +26,7 @@ $pdo = getDB();
 $bbox = isset($_GET['bbox']) ? trim($_GET['bbox']) : null;
 $from = isset($_GET['from']) ? trim($_GET['from']) : null;
 $to = isset($_GET['to']) ? trim($_GET['to']) : null;
+$days = isset($_GET['days']) ? (int)$_GET['days'] : null; // Количество дней назад
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1000;
 
 // Валидация bbox
@@ -75,6 +86,11 @@ try {
         }
         // Если дата в будущем, просто не применяем фильтр (показываем все данные)
     }
+    // Если нет фильтра по дате, показываем все данные (или можно добавить дефолтный фильтр)
+    // Для теста уберем фильтр по дате, если days не указан
+    if (!$days && !$from) {
+        // Не добавляем фильтр - показываем все данные
+    }
     if ($to) {
         $toDate = strtotime($to);
         $currentDate = time();
@@ -89,8 +105,20 @@ try {
     $limit = max(1, min(10000, (int)$limit)); // Ограничиваем от 1 до 10000
     $sql .= " ORDER BY dt DESC LIMIT " . $limit;
     
+    // Логирование для отладки (можно убрать в продакшене)
+    // error_log("SQL: $sql");
+    // error_log("Params: " . print_r($params, true));
+    
     $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
+    if (!$stmt) {
+        throw new Exception("SQL prepare failed: " . implode(", ", $pdo->errorInfo()));
+    }
+    
+    $result = $stmt->execute($params);
+    if (!$result) {
+        throw new Exception("SQL execute failed: " . implode(", ", $stmt->errorInfo()));
+    }
+    
     $results = $stmt->fetchAll();
     
     // Формируем GeoJSON
@@ -131,7 +159,13 @@ try {
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+    exit;
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+    exit;
+} catch (Error $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Fatal error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+    exit;
 }

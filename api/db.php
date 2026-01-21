@@ -3,6 +3,10 @@
  * Подключение к базе данных
  */
 
+// Отключаем вывод ошибок
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
+
 function getDB() {
     static $pdo = null;
     
@@ -23,6 +27,7 @@ function getDB() {
             ]);
         } catch (PDOException $e) {
             http_response_code(500);
+            header('Content-Type: application/json; charset=utf-8');
             die(json_encode(['error' => 'Database connection failed: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE));
         }
     }
