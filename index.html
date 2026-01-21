@@ -201,8 +201,8 @@
         <div class="legend">
             <h3>Уровень опасности</h3>
             <div class="legend-item">
-                <div class="legend-color" style="background: #2ecc71; border: 2px solid #27ae60;"></div>
-                <span><strong>Низкий</strong> (5-9 ДТП)</span>
+                <div class="legend-color" style="background: #00ff00; border: 2px solid #00cc00;"></div>
+                <span><strong>Низкий</strong> (5-9 ДТП) - ЯРКО-ЗЕЛЕНЫЙ</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #f39c12; border: 2px solid #e67e22;"></div>
@@ -262,16 +262,16 @@
             style: function(feature) {
                 const risk = feature.properties.risk_level;
                 const colors = {
-                    'low': '#2ecc71',
-                    'medium': '#f39c12',
-                    'high': '#e74c3c'
+                    'low': '#00ff00',      // Ядовито-зеленый для низкого риска
+                    'medium': '#f39c12',   // Оранжевый для среднего
+                    'high': '#e74c3c'      // Красный для высокого
                 };
                 return {
                     fillColor: colors[risk] || '#95a5a6',
                     color: '#fff',
                     weight: 2,
-                    opacity: 0.8,
-                    fillOpacity: 0.4
+                    opacity: 0.9,
+                    fillOpacity: risk === 'low' ? 0.6 : 0.4  // Зеленые зоны более заметны
                 };
             },
             onEachFeature: function(feature, layer) {
@@ -311,12 +311,9 @@
             try {
                 // Загрузка ДТП
                 if (showAccidents) {
-                    const fromDate = new Date();
+                    // Используем параметр days вместо from, чтобы избежать проблем с датами
                     const days = parseInt(period);
-                    fromDate.setDate(fromDate.getDate() - days);
-                    const from = fromDate.toISOString().split('T')[0];
-                    
-                    const accidentsUrl = `api/accidents.php?bbox=${encodeURIComponent(bbox)}&from=${from}&limit=2000`;
+                    const accidentsUrl = `api/accidents.php?bbox=${encodeURIComponent(bbox)}&days=${days}&limit=2000`;
                     console.log('📡 Запрос ДТП:', accidentsUrl);
                     
                     const accidentsResponse = await fetch(accidentsUrl);

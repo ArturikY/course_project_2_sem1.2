@@ -60,13 +60,28 @@ try {
     $params = [$minLat, $maxLat, $minLon, $maxLon];
     
     // Фильтр по дате
-    if ($from) {
-        $sql .= " AND dt >= ?";
-        $params[] = $from . ' 00:00:00';
+    // Приоритет: параметр days, затем from
+    if ($days && $days > 0) {
+        // Используем количество дней назад
+        $sql .= " AND dt >= DATE_SUB(NOW(), INTERVAL ? DAY)";
+        $params[] = $days;
+    } elseif ($from) {
+        $fromDate = strtotime($from);
+        $currentDate = time();
+        // Если дата валидна и не в будущем
+        if ($fromDate !== false && $fromDate <= $currentDate) {
+            $sql .= " AND dt >= ?";
+            $params[] = $from . ' 00:00:00';
+        }
+        // Если дата в будущем, просто не применяем фильтр (показываем все данные)
     }
     if ($to) {
-        $sql .= " AND dt <= ?";
-        $params[] = $to . ' 23:59:59';
+        $toDate = strtotime($to);
+        $currentDate = time();
+        if ($toDate !== false && $toDate <= $currentDate) {
+            $sql .= " AND dt <= ?";
+            $params[] = $to . ' 23:59:59';
+        }
     }
     
     // LIMIT нельзя использовать как параметр в prepared statements в MariaDB
