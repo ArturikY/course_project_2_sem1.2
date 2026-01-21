@@ -1,5 +1,6 @@
 -- Схема базы данных для проекта анализа ДТП
--- MySQL 8.0+ с поддержкой spatial типов
+-- MySQL 5.7+ / MariaDB 10.2+ с поддержкой spatial типов
+-- Примечание: SRID 4326 задается при вставке данных через ST_SRID()
 
 -- Создание базы данных (раскомментируй если нужно)
 -- CREATE DATABASE IF NOT EXISTS dtp_analysis CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -11,7 +12,7 @@ CREATE TABLE IF NOT EXISTS accidents (
   dt DATETIME NULL COMMENT 'Дата и время ДТП',
   lat DOUBLE NOT NULL COMMENT 'Широта',
   lon DOUBLE NOT NULL COMMENT 'Долгота',
-  geom POINT SRID 4326 NOT NULL COMMENT 'Геометрия точки (WGS84)',
+  geom POINT NOT NULL COMMENT 'Геометрия точки (WGS84, SRID задается при вставке)',
   category VARCHAR(100) NULL COMMENT 'Категория ДТП (Столкновение, Наезд и т.д.)',
   severity VARCHAR(50) NULL COMMENT 'Тяжесть (Легкий, Средний, Тяжелый, Смертельный)',
   region VARCHAR(100) NULL COMMENT 'Район Москвы',
@@ -39,7 +40,7 @@ CREATE TABLE IF NOT EXISTS grid_stats (
   cell_size INT NOT NULL COMMENT 'Размер ячейки в метрах',
   center_lat DOUBLE NOT NULL COMMENT 'Широта центра ячейки',
   center_lon DOUBLE NOT NULL COMMENT 'Долгота центра ячейки',
-  geom POLYGON SRID 4326 NULL COMMENT 'Геометрия ячейки (опционально)',
+  geom POLYGON NULL COMMENT 'Геометрия ячейки (опционально, SRID задается при вставке)',
   accident_count INT DEFAULT 0 COMMENT 'Количество ДТП в ячейке',
   severe_count INT DEFAULT 0 COMMENT 'Количество тяжелых ДТП',
   fatal_count INT DEFAULT 0 COMMENT 'Количество смертельных ДТП',
