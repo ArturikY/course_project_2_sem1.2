@@ -35,13 +35,16 @@ $minLat = (float)$bbox_parts[1];
 $maxLon = (float)$bbox_parts[2];
 $maxLat = (float)$bbox_parts[3];
 
-// Парсим период
+// Парсим период, но для данных за 2023 год не применяем фильтр по дате
+// Вместо этого используем весь доступный период данных
 $days = 30;
 if (preg_match('/(\d+)d/', $period, $matches)) {
     $days = (int)$matches[1];
 }
 
-$dateFrom = date('Y-m-d', strtotime("-$days days"));
+// НЕ применяем фильтр по дате, так как данные за 2023 год
+// $dateFrom = date('Y-m-d', strtotime("-$days days"));
+$dateFrom = null; // Показываем все данные
 
 try {
     // Простой анализ по сетке
@@ -60,15 +63,25 @@ try {
             $cellMaxLon = min($lon + $lonStep, $maxLon);
             
             // Подсчет ДТП в ячейке
-            $sql = "SELECT COUNT(*) as cnt, 
-                    SUM(CASE WHEN severity IN ('Тяжелый', 'Смертельный') THEN 1 ELSE 0 END) as severe_cnt
-                    FROM accidents
-                    WHERE lat BETWEEN ? AND ? 
-                      AND lon BETWEEN ? AND ?
-                      AND dt >= ?";
-            
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$cellMinLat, $cellMaxLat, $cellMinLon, $cellMaxLon, $dateFrom]);
+            if ($dateFrom) {
+                $sql = "SELECT COUNT(*) as cnt, 
+                        SUM(CASE WHEN severity IN ('Тяжелый', 'Смертельный') THEN 1 ELSE 0 END) as severe_cnt
+                        FROM accidents
+                        WHERE lat BETWEEN ? AND ? 
+                          AND lon BETWEEN ? AND ?
+                          AND dt >= ?";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$cellMinLat, $cellMaxLat, $cellMinLon, $cellMaxLon, $dateFrom]);
+            } else {
+                // Без фильтра по дате - считаем все данные
+                $sql = "SELECT COUNT(*) as cnt, 
+                        SUM(CASE WHEN severity IN ('Тяжелый', 'Смертельный') THEN 1 ELSE 0 END) as severe_cnt
+                        FROM accidents
+                        WHERE lat BETWEEN ? AND ? 
+                          AND lon BETWEEN ? AND ?";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$cellMinLat, $cellMaxLat, $cellMinLon, $cellMaxLon]);
+            }
             $result = $stmt->fetch();
             
             $count = (int)$result['cnt'];
