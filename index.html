@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ ДТП в Москве</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .control-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .control-group label {
+            font-size: 0.9rem;
+        }
+        
+        .control-group select,
+        .control-group input {
+            padding: 0.4rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .map-container {
+            flex: 1;
+            position: relative;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 1000;
+            min-width: 200px;
+        }
+        
+        .legend h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.3rem 0;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 2000;
+            display: none;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .stats {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 1000;
+            font-size: 0.9rem;
+        }
+        
+        .stats-item {
+            margin: 0.3rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚗 Анализ ДТП в Москве</h1>
+        <div class="controls">
+            <div class="control-group">
+                <label>Период:</label>
+                <select id="period">
+                    <option value="7d">7 дней</option>
+                    <option value="30d" selected>30 дней</option>
+                    <option value="90d">90 дней</option>
+                    <option value="365d">Год</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Порог опасности:</label>
+                <input type="number" id="threshold" value="5" min="1" max="50" style="width: 60px;">
+            </div>
+            <div class="control-group">
+                <label>
+                    <input type="checkbox" id="showAccidents" checked> Показать ДТП
+                </label>
+            </div>
+            <div class="control-group">
+                <label>
+                    <input type="checkbox" id="showHotspots" checked> Показать опасные зоны
+                </label>
+            </div>
+            <button class="btn" onclick="loadData()">Обновить</button>
+        </div>
+    </div>
+    
+    <div class="map-container">
+        <div id="map"></div>
+        
+        <div class="loading" id="loading">Загрузка данных...</div>
+        
+        <div class="stats" id="stats">
+            <div class="stats-item"><strong>Статистика</strong></div>
+            <div class="stats-item" id="accidentsCount">ДТП: 0</div>
+            <div class="stats-item" id="hotspotsCount">Опасных зон: 0</div>
+        </div>
+        
+        <div class="legend">
+            <h3>Уровень опасности</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #2ecc71;"></div>
+                <span>Низкий (5-9 ДТП)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #f39c12;"></div>
+                <span>Средний (10-19 ДТП)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #e74c3c;"></div>
+                <span>Высокий (20+ ДТП)</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Инициализация карты (центр Москвы)
+        const map = L.map('map').setView([55.7558, 37.6173], 11);
+        
+        // Добавляем тайлы OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+        
+        // Слои для данных
+        let accidentsLayer = L.geoJSON(null, {
+            pointToLayer: function(feature, latlng) {
+                return L.circleMarker(latlng, {
+                    radius: 4,
+                    fillColor: '#e74c3c',
+                    color: '#c0392b',
+                    weight: 1,
+                    opacity: 0.8,
+                    fillOpacity: 0.6
+                });
+            },
+            onEachFeature: function(feature, layer) {
+                const props = feature.properties;
+                const popup = `
+                    <strong>ДТП #${props.id}</strong><br>
+                    Дата: ${props.dt || 'Не указана'}<br>
+                    Категория: ${props.category || 'Не указана'}<br>
+                    Тяжесть: ${props.severity || 'Не указана'}<br>
+                    Район: ${props.region || 'Не указан'}<br>
+                    ${props.address ? `Адрес: ${props.address}<br>` : ''}
+                `;
+                layer.bindPopup(popup);
+            }
+        });
+        
+        let hotspotsLayer = L.geoJSON(null, {
+            style: function(feature) {
+                const risk = feature.properties.risk_level;
+                const colors = {
+                    'low': '#2ecc71',
+                    'medium': '#f39c12',
+                    'high': '#e74c3c'
+                };
+                return {
+                    fillColor: colors[risk] || '#95a5a6',
+                    color: '#fff',
+                    weight: 2,
+                    opacity: 0.8,
+                    fillOpacity: 0.4
+                };
+            },
+            onEachFeature: function(feature, layer) {
+                const props = feature.properties;
+                const popup = `
+                    <strong>Опасная зона</strong><br>
+                    ДТП: ${props.count}<br>
+                    Тяжелых: ${props.severe_count}<br>
+                    Уровень: ${props.risk_level}
+                `;
+                layer.bindPopup(popup);
+            }
+        });
+        
+        // Функция загрузки данных
+        async function loadData() {
+            const loading = document.getElementById('loading');
+            loading.classList.add('active');
+            
+            const bounds = map.getBounds();
+            const bbox = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`;
+            const period = document.getElementById('period').value;
+            const threshold = document.getElementById('threshold').value;
+            const showAccidents = document.getElementById('showAccidents').checked;
+            const showHotspots = document.getElementById('showHotspots').checked;
+            
+            try {
+                // Загрузка ДТП
+                if (showAccidents) {
+                    const fromDate = new Date();
+                    const days = parseInt(period);
+                    fromDate.setDate(fromDate.getDate() - days);
+                    const from = fromDate.toISOString().split('T')[0];
+                    
+                    const accidentsUrl = `api/accidents.php?bbox=${bbox}&from=${from}&limit=2000`;
+                    const accidentsResponse = await fetch(accidentsUrl);
+                    const accidentsData = await accidentsResponse.json();
+                    
+                    accidentsLayer.clearLayers();
+                    accidentsLayer.addData(accidentsData);
+                    if (showAccidents) {
+                        accidentsLayer.addTo(map);
+                    }
+                    
+                    document.getElementById('accidentsCount').textContent = 
+                        `ДТП: ${accidentsData.features.length}`;
+                } else {
+                    map.removeLayer(accidentsLayer);
+                }
+                
+                // Загрузка опасных зон
+                if (showHotspots) {
+                    const hotspotsUrl = `api/hotspots.php?bbox=${bbox}&period=${period}&threshold=${threshold}`;
+                    const hotspotsResponse = await fetch(hotspotsUrl);
+                    const hotspotsData = await hotspotsResponse.json();
+                    
+                    hotspotsLayer.clearLayers();
+                    hotspotsLayer.addData(hotspotsData);
+                    if (showHotspots) {
+                        hotspotsLayer.addTo(map);
+                    }
+                    
+                    document.getElementById('hotspotsCount').textContent = 
+                        `Опасных зон: ${hotspotsData.features.length}`;
+                } else {
+                    map.removeLayer(hotspotsLayer);
+                }
+                
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
+                alert('Ошибка загрузки данных: ' + error.message);
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+        
+        // Загрузка данных при изменении карты
+        map.on('moveend', loadData);
+        map.on('zoomend', loadData);
+        
+        // Первоначальная загрузка
+        loadData();
+    </script>
+</body>
+</html>
+
