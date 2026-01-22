@@ -465,6 +465,10 @@
 			<div class="legend">
 				<h3>🎨 Уровень опасности</h3>
 				<div class="legend-item">
+					<div class="legend-color" style="background: #fff9c4"></div>
+					<span><strong>Низкий</strong> (0.1-0.2 на 1000 м²)</span>
+				</div>
+				<div class="legend-item">
 					<div class="legend-color" style="background: #f39c12"></div>
 					<span><strong>Средний</strong> (0.2-0.3 на 1000 м²)</span>
 				</div>
@@ -746,16 +750,12 @@
 								const radius = props.radius || 125 // радиус в метрах
 
 								const colors = {
+									low: '#fff9c4',     // Бледно-желтый - низкая плотность
 									medium: '#f39c12',  // Оранжевый - средняя плотность
 									high: '#e74c3c',    // Красный - высокая плотность
 								}
 
 								const riskLevel = props.risk_level || 'medium'
-								
-								// Пропускаем зоны с низким уровнем (не должны попасть сюда, но на всякий случай)
-								if (riskLevel === 'low') {
-									return
-								}
 								const count = props.count || 0
 
 								// Создаем круглую зону

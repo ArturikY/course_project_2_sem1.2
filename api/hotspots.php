@@ -112,16 +112,21 @@ try {
         $densityPer1000m2 = ($count / $areaMeters) * 1000;
         
         // Определяем уровень опасности по плотности (коэффициент на 1000 м²)
-        // Пороги: medium 0.2-0.3, high > 0.3 (low не отображаем)
-        $riskLevel = null;
+        // Пороги: low 0.1-0.2, medium 0.2-0.3, high > 0.3
+        $riskLevel = 'low';
         if ($densityPer1000m2 >= 0.3) {
             $riskLevel = 'high';
         } elseif ($densityPer1000m2 >= 0.2) {
             $riskLevel = 'medium';
+        } elseif ($densityPer1000m2 >= 0.1) {
+            $riskLevel = 'low';
+        } else {
+            // Пропускаем зоны с плотностью < 0.1
+            continue;
         }
         
-        // Пропускаем зоны с низким уровнем опасности (не добавляем в результат)
-        if ($riskLevel === null) {
+        // Зоны с низким уровнем опасности отображаем только при gridSize <= 500м
+        if ($riskLevel === 'low' && $gridSize > 500) {
             continue;
         }
         
