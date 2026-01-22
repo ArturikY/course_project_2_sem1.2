@@ -4,19 +4,59 @@
  * GET /api/hotspots.php?bbox=minLon,minLat,maxLon,maxLat&period=30d&threshold=5
  */
 
+// Отключаем вывод ошибок в HTML формате
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
+
+// Устанавливаем заголовки сразу
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 
-require_once __DIR__ . '/db.php';
+// Обработка ошибок PHP
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    http_response_code(500);
+    die(json_encode(['error' => "PHP Error: $errstr in $errfile:$errline"], JSON_UNESCAPED_UNICODE));
+});
 
-$pdo = getDB();
+// Обработка фатальных ошибок
+register_shutdown_function(function() {
+    $error = error_get_last();
+    if ($error !== null && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Fatal error: ' . $error['message']], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+});
+
+try {
+    require_once __DIR__ . '/config.php';
+    require_once __DIR__ . '/data_loader.php';
+    require_once __DIR__ . '/cache_helper.php';
+} catch (Exception $e) {
+    http_response_code(500);
+    die(json_encode(['error' => 'Require error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE));
+} catch (Error $e) {
+    http_response_code(500);
+    die(json_encode(['error' => 'Require fatal error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE));
+}
+
+try {
+    $config = require __DIR__ . '/config.php';
+    $loader = new DataLoader($config);
+} catch (Exception $e) {
+    http_response_code(500);
+    die(json_encode(['error' => 'Config error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE));
+} catch (Error $e) {
+    http_response_code(500);
+    die(json_encode(['error' => 'Config fatal error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE));
+}
 
 // Параметры запроса
 $bbox = isset($_GET['bbox']) ? trim($_GET['bbox']) : null;
 $period = isset($_GET['period']) ? trim($_GET['period']) : '30d';
 $threshold = isset($_GET['threshold']) ? (int)$_GET['threshold'] : 5;
-$gridSize = isset($_GET['grid']) ? (int)$_GET['grid'] : 250;
+$gridSize = isset($_GET['grid']) ? (int)$_GET['grid'] : 1000;
 
 // Валидация bbox
 if (!$bbox) {
@@ -35,99 +75,79 @@ $minLat = (float)$bbox_parts[1];
 $maxLon = (float)$bbox_parts[2];
 $maxLat = (float)$bbox_parts[3];
 
-// Парсим период, но для данных за 2023 год не применяем фильтр по дате
-// Вместо этого используем весь доступный период данных
-$days = 30;
-if (preg_match('/(\d+)d/', $period, $matches)) {
-    $days = (int)$matches[1];
-}
-
-// НЕ применяем фильтр по дате, так как данные за 2023 год
-// $dateFrom = date('Y-m-d', strtotime("-$days days"));
-$dateFrom = null; // Показываем все данные
-
 try {
-    // Простой анализ по сетке
-    $latStep = $gridSize / 111000; // 1 градус ≈ 111 км
-    $lonStep = $gridSize / (111000 * cos(deg2rad(($minLat + $maxLat) / 2)));
+    // Создаем ключ кэша
+    $cacheKey = "hotspots:" . $bbox . ":" . $period . ":" . $threshold . ":" . $gridSize;
+    
+    // Пытаемся получить из кэша
+    $cached = getCache($cacheKey, $config);
+    if ($cached !== null) {
+        header('X-Cache: HIT');
+        echo json_encode($cached, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        exit;
+    }
+    
+    header('X-Cache: MISS');
+    
+    // Получаем статистику через универсальный загрузчик
+    $cellsData = $loader->getHotspotsStats($bbox, $period, $threshold, $gridSize);
     
     $cells = [];
-    $lat = $minLat;
-    
-    while ($lat < $maxLat) {
-        $lon = $minLon;
-        while ($lon < $maxLon) {
-            $cellMinLat = $lat;
-            $cellMaxLat = min($lat + $latStep, $maxLat);
-            $cellMinLon = $lon;
-            $cellMaxLon = min($lon + $lonStep, $maxLon);
-            
-            // Подсчет ДТП в ячейке
-            if ($dateFrom) {
-                $sql = "SELECT COUNT(*) as cnt, 
-                        SUM(CASE WHEN severity IN ('Тяжелый', 'Смертельный') THEN 1 ELSE 0 END) as severe_cnt
-                        FROM accidents
-                        WHERE lat BETWEEN ? AND ? 
-                          AND lon BETWEEN ? AND ?
-                          AND dt >= ?";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute([$cellMinLat, $cellMaxLat, $cellMinLon, $cellMaxLon, $dateFrom]);
-            } else {
-                // Без фильтра по дате - считаем все данные
-                $sql = "SELECT COUNT(*) as cnt, 
-                        SUM(CASE WHEN severity IN ('Тяжелый', 'Смертельный') THEN 1 ELSE 0 END) as severe_cnt
-                        FROM accidents
-                        WHERE lat BETWEEN ? AND ? 
-                          AND lon BETWEEN ? AND ?";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute([$cellMinLat, $cellMaxLat, $cellMinLon, $cellMaxLon]);
-            }
-            $result = $stmt->fetch();
-            
-            $count = (int)$result['cnt'];
-            $severeCount = (int)$result['severe_cnt'];
-            
-            if ($count >= $threshold) {
-                $centerLat = ($cellMinLat + $cellMaxLat) / 2;
-                $centerLon = ($cellMinLon + $cellMaxLon) / 2;
-                
-                // Определяем уровень опасности
-                // Низкий: 5-9 ДТП (зеленый)
-                // Средний: 10-19 ДТП (оранжевый/желтый)
-                // Высокий: 20+ ДТП (красный)
-                $riskLevel = 'low';
-                if ($count >= 20) {
-                    $riskLevel = 'high';
-                } elseif ($count >= 10) {
-                    $riskLevel = 'medium';
-                } else {
-                    $riskLevel = 'low'; // 5-9 ДТП
-                }
-                
-                $cells[] = [
-                    'type' => 'Feature',
-                    'geometry' => [
-                        'type' => 'Polygon',
-                        'coordinates' => [[
-                            [$cellMinLon, $cellMinLat],
-                            [$cellMaxLon, $cellMinLat],
-                            [$cellMaxLon, $cellMaxLat],
-                            [$cellMinLon, $cellMaxLat],
-                            [$cellMinLon, $cellMinLat]
-                        ]]
-                    ],
-                    'properties' => [
-                        'count' => $count,
-                        'severe_count' => $severeCount,
-                        'risk_level' => $riskLevel,
-                        'center' => [$centerLon, $centerLat]
-                    ]
-                ];
-            }
-            
-            $lon += $lonStep;
+    foreach ($cellsData as $cell) {
+        $count = $cell['count'];
+        $severeCount = $cell['severeCount'];
+        
+        $centerLat = ($cell['minLat'] + $cell['maxLat']) / 2;
+        $centerLon = ($cell['minLon'] + $cell['maxLon']) / 2;
+        
+        // Радиус круга = половина размера ячейки сетки
+        // gridSize определяет радиус круга (как было раньше)
+        $radiusMeters = $gridSize / 2;
+        
+        // Рассчитываем площадь зоны в квадратных метрах (π * r²)
+        $areaMeters = M_PI * $radiusMeters * $radiusMeters;
+        
+        // Рассчитываем плотность ДТП (количество на квадратный метр)
+        // Для удобства используем коэффициент на 1000 м² (на 0.001 км²)
+        $densityPer1000m2 = ($count / $areaMeters) * 1000;
+        
+        // Определяем уровень опасности по плотности (коэффициент на 1000 м²)
+        // Пороги: medium 0.2-0.3, high > 0.3 (low не отображаем)
+        $riskLevel = null;
+        if ($densityPer1000m2 >= 0.3) {
+            $riskLevel = 'high';
+        } elseif ($densityPer1000m2 >= 0.2) {
+            $riskLevel = 'medium';
         }
-        $lat += $latStep;
+        
+        // Пропускаем зоны с низким уровнем опасности (не добавляем в результат)
+        if ($riskLevel === null) {
+            continue;
+        }
+        
+        // Для круглых зон возвращаем Point с радиусом в properties
+        $cells[] = [
+            'type' => 'Feature',
+            'geometry' => [
+                'type' => 'Point',
+                'coordinates' => [$centerLon, $centerLat]
+            ],
+            'properties' => [
+                'count' => $count,
+                'severe_count' => $severeCount,
+                'risk_level' => $riskLevel,
+                'density_per_1000m2' => round($densityPer1000m2, 4), // плотность на 1000 м²
+                'area_m2' => round($areaMeters, 2), // площадь в м²
+                'center' => [$centerLon, $centerLat],
+                'radius' => $radiusMeters, // фиксированный радиус в метрах (не зависит от gridSize)
+                'bbox' => [
+                    'minLon' => $cell['minLon'],
+                    'minLat' => $cell['minLat'],
+                    'maxLon' => $cell['maxLon'],
+                    'maxLat' => $cell['maxLat']
+                ]
+            ]
+        ];
     }
     
     $geojson = [
@@ -135,12 +155,21 @@ try {
         'features' => $cells
     ];
     
+    // Сохраняем в кэш
+    setCache($cacheKey, $geojson, $config);
+    
     echo json_encode($geojson, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+    exit;
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+    exit;
+} catch (Error $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Fatal error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+    exit;
 }

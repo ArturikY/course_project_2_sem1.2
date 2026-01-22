@@ -1,0 +1,2413 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.60027519521094,
+                    55.57657657657658
+                ]
+            },
+            "properties": {
+                "count": 163,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2075,
+                "area_m2": 785398.16,
+                "center": [
+                    37.60027519521094,
+                    55.57657657657658
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.59227152594146,
+                    "minLat": 55.572072072072075,
+                    "maxLon": 37.60827886448042,
+                    "maxLat": 55.58108108108108
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.68031188790573,
+                    55.57657657657658
+                ]
+            },
+            "properties": {
+                "count": 179,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2279,
+                "area_m2": 785398.16,
+                "center": [
+                    37.68031188790573,
+                    55.57657657657658
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.67230821863625,
+                    "minLat": 55.572072072072075,
+                    "maxLon": 37.68831555717521,
+                    "maxLat": 55.58108108108108
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.60027519521094,
+                    55.5945945945946
+                ]
+            },
+            "properties": {
+                "count": 191,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2432,
+                "area_m2": 785398.16,
+                "center": [
+                    37.60027519521094,
+                    55.5945945945946
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.59227152594146,
+                    "minLat": 55.590090090090094,
+                    "maxLon": 37.60827886448042,
+                    "maxLat": 55.5990990990991
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.72833390352261,
+                    55.6036036036036
+                ]
+            },
+            "properties": {
+                "count": 170,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2165,
+                "area_m2": 785398.16,
+                "center": [
+                    37.72833390352261,
+                    55.6036036036036
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.72033023425313,
+                    "minLat": 55.5990990990991,
+                    "maxLon": 37.73633757279209,
+                    "maxLat": 55.608108108108105
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.48822382543823,
+                    55.61261261261261
+                ]
+            },
+            "properties": {
+                "count": 159,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2024,
+                "area_m2": 785398.16,
+                "center": [
+                    37.48822382543823,
+                    55.61261261261261
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.480220156168755,
+                    "minLat": 55.608108108108105,
+                    "maxLon": 37.49622749470771,
+                    "maxLat": 55.61711711711711
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.60027519521094,
+                    55.61261261261261
+                ]
+            },
+            "properties": {
+                "count": 194,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.247,
+                "area_m2": 785398.16,
+                "center": [
+                    37.60027519521094,
+                    55.61261261261261
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.59227152594146,
+                    "minLat": 55.608108108108105,
+                    "maxLon": 37.60827886448042,
+                    "maxLat": 55.61711711711711
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.71232656498365,
+                    55.61261261261261
+                ]
+            },
+            "properties": {
+                "count": 208,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2648,
+                "area_m2": 785398.16,
+                "center": [
+                    37.71232656498365,
+                    55.61261261261261
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.70432289571417,
+                    "minLat": 55.608108108108105,
+                    "maxLon": 37.720330234253126,
+                    "maxLat": 55.61711711711711
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.72833390352261,
+                    55.61261261261261
+                ]
+            },
+            "properties": {
+                "count": 167,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2126,
+                "area_m2": 785398.16,
+                "center": [
+                    37.72833390352261,
+                    55.61261261261261
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.72033023425313,
+                    "minLat": 55.608108108108105,
+                    "maxLon": 37.73633757279209,
+                    "maxLat": 55.61711711711711
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.50423116397719,
+                    55.62162162162162
+                ]
+            },
+            "properties": {
+                "count": 163,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2075,
+                "area_m2": 785398.16,
+                "center": [
+                    37.50423116397719,
+                    55.62162162162162
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.49622749470771,
+                    "minLat": 55.61711711711712,
+                    "maxLon": 37.512234833246666,
+                    "maxLat": 55.626126126126124
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.6162825337499,
+                    55.62162162162162
+                ]
+            },
+            "properties": {
+                "count": 179,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2279,
+                "area_m2": 785398.16,
+                "center": [
+                    37.6162825337499,
+                    55.62162162162162
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.608278864480425,
+                    "minLat": 55.61711711711712,
+                    "maxLon": 37.62428620301938,
+                    "maxLat": 55.626126126126124
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.664304549366776,
+                    55.62162162162162
+                ]
+            },
+            "properties": {
+                "count": 186,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2368,
+                "area_m2": 785398.16,
+                "center": [
+                    37.664304549366776,
+                    55.62162162162162
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.6563008800973,
+                    "minLat": 55.61711711711712,
+                    "maxLon": 37.67230821863625,
+                    "maxLat": 55.626126126126124
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.71232656498365,
+                    55.62162162162162
+                ]
+            },
+            "properties": {
+                "count": 237,
+                "severe_count": 0,
+                "risk_level": "high",
+                "density_per_1000m2": 0.3018,
+                "area_m2": 785398.16,
+                "center": [
+                    37.71232656498365,
+                    55.62162162162162
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.70432289571417,
+                    "minLat": 55.61711711711712,
+                    "maxLon": 37.720330234253126,
+                    "maxLat": 55.626126126126124
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.52023850251615,
+                    55.63063063063063
+                ]
+            },
+            "properties": {
+                "count": 167,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2126,
+                "area_m2": 785398.16,
+                "center": [
+                    37.52023850251615,
+                    55.63063063063063
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.51223483324667,
+                    "minLat": 55.626126126126124,
+                    "maxLon": 37.52824217178563,
+                    "maxLat": 55.63513513513513
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.6162825337499,
+                    55.63063063063063
+                ]
+            },
+            "properties": {
+                "count": 185,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2355,
+                "area_m2": 785398.16,
+                "center": [
+                    37.6162825337499,
+                    55.63063063063063
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.608278864480425,
+                    "minLat": 55.626126126126124,
+                    "maxLon": 37.62428620301938,
+                    "maxLat": 55.63513513513513
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.52023850251615,
+                    55.63963963963964
+                ]
+            },
+            "properties": {
+                "count": 160,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2037,
+                "area_m2": 785398.16,
+                "center": [
+                    37.52023850251615,
+                    55.63963963963964
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.51223483324667,
+                    "minLat": 55.63513513513514,
+                    "maxLon": 37.52824217178563,
+                    "maxLat": 55.64414414414414
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.60027519521094,
+                    55.63963963963964
+                ]
+            },
+            "properties": {
+                "count": 209,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2661,
+                "area_m2": 785398.16,
+                "center": [
+                    37.60027519521094,
+                    55.63963963963964
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.59227152594146,
+                    "minLat": 55.63513513513514,
+                    "maxLon": 37.60827886448042,
+                    "maxLat": 55.64414414414414
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.744341242061566,
+                    55.648648648648646
+                ]
+            },
+            "properties": {
+                "count": 169,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2152,
+                "area_m2": 785398.16,
+                "center": [
+                    37.744341242061566,
+                    55.648648648648646
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.73633757279209,
+                    "minLat": 55.64414414414414,
+                    "maxLon": 37.75234491133104,
+                    "maxLat": 55.65315315315315
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.6162825337499,
+                    55.65765765765766
+                ]
+            },
+            "properties": {
+                "count": 167,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2126,
+                "area_m2": 785398.16,
+                "center": [
+                    37.6162825337499,
+                    55.65765765765766
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.608278864480425,
+                    "minLat": 55.653153153153156,
+                    "maxLon": 37.62428620301938,
+                    "maxLat": 55.66216216216216
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.744341242061566,
+                    55.65765765765766
+                ]
+            },
+            "properties": {
+                "count": 223,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2839,
+                "area_m2": 785398.16,
+                "center": [
+                    37.744341242061566,
+                    55.65765765765766
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.73633757279209,
+                    "minLat": 55.653153153153156,
+                    "maxLon": 37.75234491133104,
+                    "maxLat": 55.66216216216216
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.55225317959407,
+                    55.666666666666664
+                ]
+            },
+            "properties": {
+                "count": 161,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.205,
+                "area_m2": 785398.16,
+                "center": [
+                    37.55225317959407,
+                    55.666666666666664
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.54424951032459,
+                    "minLat": 55.66216216216216,
+                    "maxLon": 37.560256848863546,
+                    "maxLat": 55.67117117117117
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.664304549366776,
+                    55.67567567567568
+                ]
+            },
+            "properties": {
+                "count": 171,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2177,
+                "area_m2": 785398.16,
+                "center": [
+                    37.664304549366776,
+                    55.67567567567568
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.6563008800973,
+                    "minLat": 55.671171171171174,
+                    "maxLon": 37.67230821863625,
+                    "maxLat": 55.68018018018018
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.744341242061566,
+                    55.67567567567568
+                ]
+            },
+            "properties": {
+                "count": 197,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2508,
+                "area_m2": 785398.16,
+                "center": [
+                    37.744341242061566,
+                    55.67567567567568
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.73633757279209,
+                    "minLat": 55.671171171171174,
+                    "maxLon": 37.75234491133104,
+                    "maxLat": 55.68018018018018
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.76034858060053,
+                    55.67567567567568
+                ]
+            },
+            "properties": {
+                "count": 159,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2024,
+                "area_m2": 785398.16,
+                "center": [
+                    37.76034858060053,
+                    55.67567567567568
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.75234491133105,
+                    "minLat": 55.671171171171174,
+                    "maxLon": 37.768352249870006,
+                    "maxLat": 55.68018018018018
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.536245841055106,
+                    55.68468468468468
+                ]
+            },
+            "properties": {
+                "count": 175,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2228,
+                "area_m2": 785398.16,
+                "center": [
+                    37.536245841055106,
+                    55.68468468468468
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.52824217178563,
+                    "minLat": 55.68018018018018,
+                    "maxLon": 37.54424951032458,
+                    "maxLat": 55.689189189189186
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.55225317959407,
+                    55.68468468468468
+                ]
+            },
+            "properties": {
+                "count": 197,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2508,
+                "area_m2": 785398.16,
+                "center": [
+                    37.55225317959407,
+                    55.68468468468468
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.54424951032459,
+                    "minLat": 55.68018018018018,
+                    "maxLon": 37.560256848863546,
+                    "maxLat": 55.689189189189186
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.56826051813302,
+                    55.68468468468468
+                ]
+            },
+            "properties": {
+                "count": 176,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2241,
+                "area_m2": 785398.16,
+                "center": [
+                    37.56826051813302,
+                    55.68468468468468
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.560256848863546,
+                    "minLat": 55.68018018018018,
+                    "maxLon": 37.5762641874025,
+                    "maxLat": 55.689189189189186
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.55225317959407,
+                    55.69369369369369
+                ]
+            },
+            "properties": {
+                "count": 162,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2063,
+                "area_m2": 785398.16,
+                "center": [
+                    37.55225317959407,
+                    55.69369369369369
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.54424951032459,
+                    "minLat": 55.689189189189186,
+                    "maxLon": 37.560256848863546,
+                    "maxLat": 55.69819819819819
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.6162825337499,
+                    55.69369369369369
+                ]
+            },
+            "properties": {
+                "count": 181,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2305,
+                "area_m2": 785398.16,
+                "center": [
+                    37.6162825337499,
+                    55.69369369369369
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.608278864480425,
+                    "minLat": 55.689189189189186,
+                    "maxLon": 37.62428620301938,
+                    "maxLat": 55.69819819819819
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.6162825337499,
+                    55.7027027027027
+                ]
+            },
+            "properties": {
+                "count": 247,
+                "severe_count": 0,
+                "risk_level": "high",
+                "density_per_1000m2": 0.3145,
+                "area_m2": 785398.16,
+                "center": [
+                    37.6162825337499,
+                    55.7027027027027
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.608278864480425,
+                    "minLat": 55.6981981981982,
+                    "maxLon": 37.62428620301938,
+                    "maxLat": 55.707207207207205
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.76034858060053,
+                    55.7027027027027
+                ]
+            },
+            "properties": {
+                "count": 249,
+                "severe_count": 0,
+                "risk_level": "high",
+                "density_per_1000m2": 0.317,
+                "area_m2": 785398.16,
+                "center": [
+                    37.76034858060053,
+                    55.7027027027027
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.75234491133105,
+                    "minLat": 55.6981981981982,
+                    "maxLon": 37.768352249870006,
+                    "maxLat": 55.707207207207205
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.77635591913948,
+                    55.7027027027027
+                ]
+            },
+            "properties": {
+                "count": 167,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2126,
+                "area_m2": 785398.16,
+                "center": [
+                    37.77635591913948,
+                    55.7027027027027
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.768352249870006,
+                    "minLat": 55.6981981981982,
+                    "maxLon": 37.78435958840896,
+                    "maxLat": 55.707207207207205
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.584267856671985,
+                    55.71171171171171
+                ]
+            },
+            "properties": {
+                "count": 225,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2865,
+                "area_m2": 785398.16,
+                "center": [
+                    37.584267856671985,
+                    55.71171171171171
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.57626418740251,
+                    "minLat": 55.707207207207205,
+                    "maxLon": 37.59227152594146,
+                    "maxLat": 55.71621621621621
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.6162825337499,
+                    55.71171171171171
+                ]
+            },
+            "properties": {
+                "count": 252,
+                "severe_count": 0,
+                "risk_level": "high",
+                "density_per_1000m2": 0.3209,
+                "area_m2": 785398.16,
+                "center": [
+                    37.6162825337499,
+                    55.71171171171171
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.608278864480425,
+                    "minLat": 55.707207207207205,
+                    "maxLon": 37.62428620301938,
+                    "maxLat": 55.71621621621621
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.664304549366776,
+                    55.71171171171171
+                ]
+            },
+            "properties": {
+                "count": 187,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2381,
+                "area_m2": 785398.16,
+                "center": [
+                    37.664304549366776,
+                    55.71171171171171
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.6563008800973,
+                    "minLat": 55.707207207207205,
+                    "maxLon": 37.67230821863625,
+                    "maxLat": 55.71621621621621
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.4241944712824,
+                    55.72072072072072
+                ]
+            },
+            "properties": {
+                "count": 158,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2012,
+                "area_m2": 785398.16,
+                "center": [
+                    37.4241944712824,
+                    55.72072072072072
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.41619080201292,
+                    "minLat": 55.71621621621622,
+                    "maxLon": 37.432198140551876,
+                    "maxLat": 55.72522522522522
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.56826051813302,
+                    55.72072072072072
+                ]
+            },
+            "properties": {
+                "count": 171,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2177,
+                "area_m2": 785398.16,
+                "center": [
+                    37.56826051813302,
+                    55.72072072072072
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.560256848863546,
+                    "minLat": 55.71621621621622,
+                    "maxLon": 37.5762641874025,
+                    "maxLat": 55.72522522522522
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.47221648689927,
+                    55.729729729729726
+                ]
+            },
+            "properties": {
+                "count": 176,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2241,
+                "area_m2": 785398.16,
+                "center": [
+                    37.47221648689927,
+                    55.729729729729726
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.46421281762979,
+                    "minLat": 55.72522522522522,
+                    "maxLon": 37.48022015616875,
+                    "maxLat": 55.73423423423423
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.48822382543823,
+                    55.729729729729726
+                ]
+            },
+            "properties": {
+                "count": 159,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2024,
+                "area_m2": 785398.16,
+                "center": [
+                    37.48822382543823,
+                    55.729729729729726
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.480220156168755,
+                    "minLat": 55.72522522522522,
+                    "maxLon": 37.49622749470771,
+                    "maxLat": 55.73423423423423
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.6162825337499,
+                    55.729729729729726
+                ]
+            },
+            "properties": {
+                "count": 196,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2496,
+                "area_m2": 785398.16,
+                "center": [
+                    37.6162825337499,
+                    55.729729729729726
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.608278864480425,
+                    "minLat": 55.72522522522522,
+                    "maxLon": 37.62428620301938,
+                    "maxLat": 55.73423423423423
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.664304549366776,
+                    55.729729729729726
+                ]
+            },
+            "properties": {
+                "count": 165,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2101,
+                "area_m2": 785398.16,
+                "center": [
+                    37.664304549366776,
+                    55.729729729729726
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.6563008800973,
+                    "minLat": 55.72522522522522,
+                    "maxLon": 37.67230821863625,
+                    "maxLat": 55.73423423423423
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.536245841055106,
+                    55.73873873873874
+                ]
+            },
+            "properties": {
+                "count": 178,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2266,
+                "area_m2": 785398.16,
+                "center": [
+                    37.536245841055106,
+                    55.73873873873874
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.52824217178563,
+                    "minLat": 55.734234234234236,
+                    "maxLon": 37.54424951032458,
+                    "maxLat": 55.74324324324324
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.55225317959407,
+                    55.747747747747745
+                ]
+            },
+            "properties": {
+                "count": 170,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2165,
+                "area_m2": 785398.16,
+                "center": [
+                    37.55225317959407,
+                    55.747747747747745
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.54424951032459,
+                    "minLat": 55.74324324324324,
+                    "maxLon": 37.560256848863546,
+                    "maxLat": 55.75225225225225
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.56826051813302,
+                    55.747747747747745
+                ]
+            },
+            "properties": {
+                "count": 179,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2279,
+                "area_m2": 785398.16,
+                "center": [
+                    37.56826051813302,
+                    55.747747747747745
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.560256848863546,
+                    "minLat": 55.74324324324324,
+                    "maxLon": 37.5762641874025,
+                    "maxLat": 55.75225225225225
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.71232656498365,
+                    55.747747747747745
+                ]
+            },
+            "properties": {
+                "count": 171,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2177,
+                "area_m2": 785398.16,
+                "center": [
+                    37.71232656498365,
+                    55.747747747747745
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.70432289571417,
+                    "minLat": 55.74324324324324,
+                    "maxLon": 37.720330234253126,
+                    "maxLat": 55.75225225225225
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.584267856671985,
+                    55.75675675675676
+                ]
+            },
+            "properties": {
+                "count": 177,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2254,
+                "area_m2": 785398.16,
+                "center": [
+                    37.584267856671985,
+                    55.75675675675676
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.57626418740251,
+                    "minLat": 55.752252252252255,
+                    "maxLon": 37.59227152594146,
+                    "maxLat": 55.76126126126126
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.60027519521094,
+                    55.75675675675676
+                ]
+            },
+            "properties": {
+                "count": 168,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2139,
+                "area_m2": 785398.16,
+                "center": [
+                    37.60027519521094,
+                    55.75675675675676
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.59227152594146,
+                    "minLat": 55.752252252252255,
+                    "maxLon": 37.60827886448042,
+                    "maxLat": 55.76126126126126
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.6162825337499,
+                    55.75675675675676
+                ]
+            },
+            "properties": {
+                "count": 167,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2126,
+                "area_m2": 785398.16,
+                "center": [
+                    37.6162825337499,
+                    55.75675675675676
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.608278864480425,
+                    "minLat": 55.752252252252255,
+                    "maxLon": 37.62428620301938,
+                    "maxLat": 55.76126126126126
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.56826051813302,
+                    55.765765765765764
+                ]
+            },
+            "properties": {
+                "count": 177,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2254,
+                "area_m2": 785398.16,
+                "center": [
+                    37.56826051813302,
+                    55.765765765765764
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.560256848863546,
+                    "minLat": 55.76126126126126,
+                    "maxLon": 37.5762641874025,
+                    "maxLat": 55.77027027027027
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.60027519521094,
+                    55.765765765765764
+                ]
+            },
+            "properties": {
+                "count": 189,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2406,
+                "area_m2": 785398.16,
+                "center": [
+                    37.60027519521094,
+                    55.765765765765764
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.59227152594146,
+                    "minLat": 55.76126126126126,
+                    "maxLon": 37.60827886448042,
+                    "maxLat": 55.77027027027027
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.47221648689927,
+                    55.77477477477478
+                ]
+            },
+            "properties": {
+                "count": 179,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2279,
+                "area_m2": 785398.16,
+                "center": [
+                    37.47221648689927,
+                    55.77477477477478
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.46421281762979,
+                    "minLat": 55.770270270270274,
+                    "maxLon": 37.48022015616875,
+                    "maxLat": 55.77927927927928
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.52023850251615,
+                    55.77477477477478
+                ]
+            },
+            "properties": {
+                "count": 161,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.205,
+                "area_m2": 785398.16,
+                "center": [
+                    37.52023850251615,
+                    55.77477477477478
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.51223483324667,
+                    "minLat": 55.770270270270274,
+                    "maxLon": 37.52824217178563,
+                    "maxLat": 55.77927927927928
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.584267856671985,
+                    55.77477477477478
+                ]
+            },
+            "properties": {
+                "count": 276,
+                "severe_count": 0,
+                "risk_level": "high",
+                "density_per_1000m2": 0.3514,
+                "area_m2": 785398.16,
+                "center": [
+                    37.584267856671985,
+                    55.77477477477478
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.57626418740251,
+                    "minLat": 55.770270270270274,
+                    "maxLon": 37.59227152594146,
+                    "maxLat": 55.77927927927928
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.82437793475636,
+                    55.77477477477478
+                ]
+            },
+            "properties": {
+                "count": 159,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2024,
+                "area_m2": 785398.16,
+                "center": [
+                    37.82437793475636,
+                    55.77477477477478
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.816374265486886,
+                    "minLat": 55.770270270270274,
+                    "maxLon": 37.83238160402584,
+                    "maxLat": 55.77927927927928
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.56826051813302,
+                    55.78378378378378
+                ]
+            },
+            "properties": {
+                "count": 200,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2546,
+                "area_m2": 785398.16,
+                "center": [
+                    37.56826051813302,
+                    55.78378378378378
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.560256848863546,
+                    "minLat": 55.77927927927928,
+                    "maxLon": 37.5762641874025,
+                    "maxLat": 55.788288288288285
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.72833390352261,
+                    55.78378378378378
+                ]
+            },
+            "properties": {
+                "count": 193,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2457,
+                "area_m2": 785398.16,
+                "center": [
+                    37.72833390352261,
+                    55.78378378378378
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.72033023425313,
+                    "minLat": 55.77927927927928,
+                    "maxLon": 37.73633757279209,
+                    "maxLat": 55.788288288288285
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.48822382543823,
+                    55.79279279279279
+                ]
+            },
+            "properties": {
+                "count": 181,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2305,
+                "area_m2": 785398.16,
+                "center": [
+                    37.48822382543823,
+                    55.79279279279279
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.480220156168755,
+                    "minLat": 55.788288288288285,
+                    "maxLon": 37.49622749470771,
+                    "maxLat": 55.79729729729729
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.55225317959407,
+                    55.79279279279279
+                ]
+            },
+            "properties": {
+                "count": 220,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2801,
+                "area_m2": 785398.16,
+                "center": [
+                    37.55225317959407,
+                    55.79279279279279
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.54424951032459,
+                    "minLat": 55.788288288288285,
+                    "maxLon": 37.560256848863546,
+                    "maxLat": 55.79729729729729
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.56826051813302,
+                    55.79279279279279
+                ]
+            },
+            "properties": {
+                "count": 166,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2114,
+                "area_m2": 785398.16,
+                "center": [
+                    37.56826051813302,
+                    55.79279279279279
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.560256848863546,
+                    "minLat": 55.788288288288285,
+                    "maxLon": 37.5762641874025,
+                    "maxLat": 55.79729729729729
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.584267856671985,
+                    55.79279279279279
+                ]
+            },
+            "properties": {
+                "count": 285,
+                "severe_count": 0,
+                "risk_level": "high",
+                "density_per_1000m2": 0.3629,
+                "area_m2": 785398.16,
+                "center": [
+                    37.584267856671985,
+                    55.79279279279279
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.57626418740251,
+                    "minLat": 55.788288288288285,
+                    "maxLon": 37.59227152594146,
+                    "maxLat": 55.79729729729729
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.6162825337499,
+                    55.79279279279279
+                ]
+            },
+            "properties": {
+                "count": 234,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2979,
+                "area_m2": 785398.16,
+                "center": [
+                    37.6162825337499,
+                    55.79279279279279
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.608278864480425,
+                    "minLat": 55.788288288288285,
+                    "maxLon": 37.62428620301938,
+                    "maxLat": 55.79729729729729
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.63228987228886,
+                    55.79279279279279
+                ]
+            },
+            "properties": {
+                "count": 208,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2648,
+                "area_m2": 785398.16,
+                "center": [
+                    37.63228987228886,
+                    55.79279279279279
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.62428620301938,
+                    "minLat": 55.788288288288285,
+                    "maxLon": 37.640293541558336,
+                    "maxLat": 55.79729729729729
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.71232656498365,
+                    55.79279279279279
+                ]
+            },
+            "properties": {
+                "count": 167,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2126,
+                "area_m2": 785398.16,
+                "center": [
+                    37.71232656498365,
+                    55.79279279279279
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.70432289571417,
+                    "minLat": 55.788288288288285,
+                    "maxLon": 37.720330234253126,
+                    "maxLat": 55.79729729729729
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.792363257678446,
+                    55.79279279279279
+                ]
+            },
+            "properties": {
+                "count": 205,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.261,
+                "area_m2": 785398.16,
+                "center": [
+                    37.792363257678446,
+                    55.79279279279279
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.78435958840897,
+                    "minLat": 55.788288288288285,
+                    "maxLon": 37.80036692694792,
+                    "maxLat": 55.79729729729729
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.39217979420448,
+                    55.8018018018018
+                ]
+            },
+            "properties": {
+                "count": 169,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2152,
+                "area_m2": 785398.16,
+                "center": [
+                    37.39217979420448,
+                    55.8018018018018
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.384176124935,
+                    "minLat": 55.7972972972973,
+                    "maxLon": 37.40018346347396,
+                    "maxLat": 55.806306306306304
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.52023850251615,
+                    55.8018018018018
+                ]
+            },
+            "properties": {
+                "count": 176,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2241,
+                "area_m2": 785398.16,
+                "center": [
+                    37.52023850251615,
+                    55.8018018018018
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.51223483324667,
+                    "minLat": 55.7972972972973,
+                    "maxLon": 37.52824217178563,
+                    "maxLat": 55.806306306306304
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.536245841055106,
+                    55.8018018018018
+                ]
+            },
+            "properties": {
+                "count": 171,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2177,
+                "area_m2": 785398.16,
+                "center": [
+                    37.536245841055106,
+                    55.8018018018018
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.52824217178563,
+                    "minLat": 55.7972972972973,
+                    "maxLon": 37.54424951032458,
+                    "maxLat": 55.806306306306304
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.584267856671985,
+                    55.8018018018018
+                ]
+            },
+            "properties": {
+                "count": 171,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2177,
+                "area_m2": 785398.16,
+                "center": [
+                    37.584267856671985,
+                    55.8018018018018
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.57626418740251,
+                    "minLat": 55.7972972972973,
+                    "maxLon": 37.59227152594146,
+                    "maxLat": 55.806306306306304
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.63228987228886,
+                    55.81081081081081
+                ]
+            },
+            "properties": {
+                "count": 162,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2063,
+                "area_m2": 785398.16,
+                "center": [
+                    37.63228987228886,
+                    55.81081081081081
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.62428620301938,
+                    "minLat": 55.806306306306304,
+                    "maxLon": 37.640293541558336,
+                    "maxLat": 55.81531531531531
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.77635591913948,
+                    55.81081081081081
+                ]
+            },
+            "properties": {
+                "count": 161,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.205,
+                "area_m2": 785398.16,
+                "center": [
+                    37.77635591913948,
+                    55.81081081081081
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.768352249870006,
+                    "minLat": 55.806306306306304,
+                    "maxLon": 37.78435958840896,
+                    "maxLat": 55.81531531531531
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.792363257678446,
+                    55.81081081081081
+                ]
+            },
+            "properties": {
+                "count": 194,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.247,
+                "area_m2": 785398.16,
+                "center": [
+                    37.792363257678446,
+                    55.81081081081081
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.78435958840897,
+                    "minLat": 55.806306306306304,
+                    "maxLon": 37.80036692694792,
+                    "maxLat": 55.81531531531531
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.50423116397719,
+                    55.81981981981982
+                ]
+            },
+            "properties": {
+                "count": 159,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2024,
+                "area_m2": 785398.16,
+                "center": [
+                    37.50423116397719,
+                    55.81981981981982
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.49622749470771,
+                    "minLat": 55.81531531531532,
+                    "maxLon": 37.512234833246666,
+                    "maxLat": 55.82432432432432
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.63228987228886,
+                    55.81981981981982
+                ]
+            },
+            "properties": {
+                "count": 182,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2317,
+                "area_m2": 785398.16,
+                "center": [
+                    37.63228987228886,
+                    55.81981981981982
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.62428620301938,
+                    "minLat": 55.81531531531532,
+                    "maxLon": 37.640293541558336,
+                    "maxLat": 55.82432432432432
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.64829721082781,
+                    55.81981981981982
+                ]
+            },
+            "properties": {
+                "count": 191,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2432,
+                "area_m2": 785398.16,
+                "center": [
+                    37.64829721082781,
+                    55.81981981981982
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.640293541558336,
+                    "minLat": 55.81531531531532,
+                    "maxLon": 37.65630088009729,
+                    "maxLat": 55.82432432432432
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.64829721082781,
+                    55.828828828828826
+                ]
+            },
+            "properties": {
+                "count": 202,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2572,
+                "area_m2": 785398.16,
+                "center": [
+                    37.64829721082781,
+                    55.828828828828826
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.640293541558336,
+                    "minLat": 55.82432432432432,
+                    "maxLon": 37.65630088009729,
+                    "maxLat": 55.83333333333333
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.39217979420448,
+                    55.83783783783784
+                ]
+            },
+            "properties": {
+                "count": 164,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2088,
+                "area_m2": 785398.16,
+                "center": [
+                    37.39217979420448,
+                    55.83783783783784
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.384176124935,
+                    "minLat": 55.833333333333336,
+                    "maxLon": 37.40018346347396,
+                    "maxLat": 55.84234234234234
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.36016511712656,
+                    55.846846846846844
+                ]
+            },
+            "properties": {
+                "count": 242,
+                "severe_count": 0,
+                "risk_level": "high",
+                "density_per_1000m2": 0.3081,
+                "area_m2": 785398.16,
+                "center": [
+                    37.36016511712656,
+                    55.846846846846844
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.352161447857085,
+                    "minLat": 55.84234234234234,
+                    "maxLon": 37.36816878639604,
+                    "maxLat": 55.85135135135135
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.44020180982135,
+                    55.846846846846844
+                ]
+            },
+            "properties": {
+                "count": 223,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2839,
+                "area_m2": 785398.16,
+                "center": [
+                    37.44020180982135,
+                    55.846846846846844
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.432198140551876,
+                    "minLat": 55.84234234234234,
+                    "maxLon": 37.44820547909083,
+                    "maxLat": 55.85135135135135
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.584267856671985,
+                    55.846846846846844
+                ]
+            },
+            "properties": {
+                "count": 192,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2445,
+                "area_m2": 785398.16,
+                "center": [
+                    37.584267856671985,
+                    55.846846846846844
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.57626418740251,
+                    "minLat": 55.84234234234234,
+                    "maxLon": 37.59227152594146,
+                    "maxLat": 55.85135135135135
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.60027519521094,
+                    55.86486486486486
+                ]
+            },
+            "properties": {
+                "count": 195,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2483,
+                "area_m2": 785398.16,
+                "center": [
+                    37.60027519521094,
+                    55.86486486486486
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.59227152594146,
+                    "minLat": 55.86036036036036,
+                    "maxLon": 37.60827886448042,
+                    "maxLat": 55.869369369369366
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.55225317959407,
+                    55.87387387387387
+                ]
+            },
+            "properties": {
+                "count": 160,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2037,
+                "area_m2": 785398.16,
+                "center": [
+                    37.55225317959407,
+                    55.87387387387387
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.54424951032459,
+                    "minLat": 55.869369369369366,
+                    "maxLon": 37.560256848863546,
+                    "maxLat": 55.87837837837837
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.72833390352261,
+                    55.88288288288288
+                ]
+            },
+            "properties": {
+                "count": 188,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2394,
+                "area_m2": 785398.16,
+                "center": [
+                    37.72833390352261,
+                    55.88288288288288
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.72033023425313,
+                    "minLat": 55.87837837837838,
+                    "maxLon": 37.73633757279209,
+                    "maxLat": 55.887387387387385
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.584267856671985,
+                    55.89189189189189
+                ]
+            },
+            "properties": {
+                "count": 174,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2215,
+                "area_m2": 785398.16,
+                "center": [
+                    37.584267856671985,
+                    55.89189189189189
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.57626418740251,
+                    "minLat": 55.887387387387385,
+                    "maxLon": 37.59227152594146,
+                    "maxLat": 55.89639639639639
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.664304549366776,
+                    55.89189189189189
+                ]
+            },
+            "properties": {
+                "count": 212,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2699,
+                "area_m2": 785398.16,
+                "center": [
+                    37.664304549366776,
+                    55.89189189189189
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.6563008800973,
+                    "minLat": 55.887387387387385,
+                    "maxLon": 37.67230821863625,
+                    "maxLat": 55.89639639639639
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.68031188790573,
+                    55.89189189189189
+                ]
+            },
+            "properties": {
+                "count": 195,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2483,
+                "area_m2": 785398.16,
+                "center": [
+                    37.68031188790573,
+                    55.89189189189189
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.67230821863625,
+                    "minLat": 55.887387387387385,
+                    "maxLon": 37.68831555717521,
+                    "maxLat": 55.89639639639639
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.584267856671985,
+                    55.9009009009009
+                ]
+            },
+            "properties": {
+                "count": 216,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.275,
+                "area_m2": 785398.16,
+                "center": [
+                    37.584267856671985,
+                    55.9009009009009
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.57626418740251,
+                    "minLat": 55.8963963963964,
+                    "maxLon": 37.59227152594146,
+                    "maxLat": 55.9054054054054
+                }
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    37.168077054659065,
+                    55.98198198198198
+                ]
+            },
+            "properties": {
+                "count": 184,
+                "severe_count": 0,
+                "risk_level": "medium",
+                "density_per_1000m2": 0.2343,
+                "area_m2": 785398.16,
+                "center": [
+                    37.168077054659065,
+                    55.98198198198198
+                ],
+                "radius": 500,
+                "bbox": {
+                    "minLon": 37.16007338538959,
+                    "minLat": 55.97747747747748,
+                    "maxLon": 37.17608072392854,
+                    "maxLat": 55.986486486486484
+                }
+            }
+        }
+    ]
+}

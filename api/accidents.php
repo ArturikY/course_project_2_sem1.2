@@ -18,9 +18,17 @@ set_error_handler(function($errno, $errstr, $errfile, $errline) {
     die(json_encode(['error' => "PHP Error: $errstr in $errfile:$errline"], JSON_UNESCAPED_UNICODE));
 });
 
-require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/data_loader.php';
+require_once __DIR__ . '/cache_helper.php';
 
-$pdo = getDB();
+try {
+    $config = require __DIR__ . '/config.php';
+    $loader = new DataLoader($config);
+} catch (Exception $e) {
+    http_response_code(500);
+    die(json_encode(['error' => 'Config error: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE));
+}
 
 // Параметры запроса
 $bbox = isset($_GET['bbox']) ? trim($_GET['bbox']) : null;
@@ -59,67 +67,21 @@ if (($maxLon - $minLon) > 1.0 || ($maxLat - $minLat) > 1.0) {
 }
 
 try {
-    // Построение запроса
-    $sql = "SELECT 
-        id, dt, lat, lon, 
-        category, severity, region, light, address,
-        tags, weather, nearby, vehicles
-    FROM accidents
-    WHERE lat BETWEEN ? AND ? 
-      AND lon BETWEEN ? AND ?";
+    // Создаем ключ кэша
+    $cacheKey = "accidents:" . $bbox . ":" . ($from ?? '') . ":" . ($to ?? '') . ":" . ($days ?? '') . ":" . $limit;
     
-    $params = [$minLat, $maxLat, $minLon, $maxLon];
-    
-    // Фильтр по дате
-    // Приоритет: параметр days, затем from
-    if ($days && $days > 0) {
-        // Используем количество дней назад
-        $sql .= " AND dt >= DATE_SUB(NOW(), INTERVAL ? DAY)";
-        $params[] = $days;
-    } elseif ($from) {
-        $fromDate = strtotime($from);
-        $currentDate = time();
-        // Если дата валидна и не в будущем
-        if ($fromDate !== false && $fromDate <= $currentDate) {
-            $sql .= " AND dt >= ?";
-            $params[] = $from . ' 00:00:00';
-        }
-        // Если дата в будущем, просто не применяем фильтр (показываем все данные)
-    }
-    // Если нет фильтра по дате, показываем все данные (или можно добавить дефолтный фильтр)
-    // Для теста уберем фильтр по дате, если days не указан
-    if (!$days && !$from) {
-        // Не добавляем фильтр - показываем все данные
-    }
-    if ($to) {
-        $toDate = strtotime($to);
-        $currentDate = time();
-        if ($toDate !== false && $toDate <= $currentDate) {
-            $sql .= " AND dt <= ?";
-            $params[] = $to . ' 23:59:59';
-        }
+    // Пытаемся получить из кэша
+    $cached = getCache($cacheKey, $config);
+    if ($cached !== null) {
+        header('X-Cache: HIT');
+        echo json_encode($cached, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        exit;
     }
     
-    // LIMIT нельзя использовать как параметр в prepared statements в MariaDB
-    // Используем прямое значение, но проверяем его безопасность
-    $limit = max(1, min(10000, (int)$limit)); // Ограничиваем от 1 до 10000
-    $sql .= " ORDER BY dt DESC LIMIT " . $limit;
+    header('X-Cache: MISS');
     
-    // Логирование для отладки (можно убрать в продакшене)
-    // error_log("SQL: $sql");
-    // error_log("Params: " . print_r($params, true));
-    
-    $stmt = $pdo->prepare($sql);
-    if (!$stmt) {
-        throw new Exception("SQL prepare failed: " . implode(", ", $pdo->errorInfo()));
-    }
-    
-    $result = $stmt->execute($params);
-    if (!$result) {
-        throw new Exception("SQL execute failed: " . implode(", ", $stmt->errorInfo()));
-    }
-    
-    $results = $stmt->fetchAll();
+    // Получаем данные через универсальный загрузчик
+    $results = $loader->getAccidents($bbox, $from, $to, $limit);
     
     // Формируем GeoJSON
     $features = [];
@@ -153,6 +115,9 @@ try {
         'type' => 'FeatureCollection',
         'features' => $features
     ];
+    
+    // Сохраняем в кэш
+    setCache($cacheKey, $geojson, $config);
     
     echo json_encode($geojson, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     
