@@ -711,8 +711,12 @@
 				const userPanel = document.getElementById('userPanel')
 				const userPanelContent = document.getElementById('userPanelContent')
 				
-				if (!userPanel || !userPanelContent || !currentUser) return
+				if (!userPanel || !userPanelContent || !currentUser) {
+					console.warn('⚠️ showUserPanel: панель или пользователь не найдены')
+					return
+				}
 
+				console.log('✅ Отображение панели пользователя для:', currentUser.login)
 				userPanel.style.display = 'block'
 				
 				let html = `
@@ -725,6 +729,12 @@
 				`
 				
 				userPanelContent.innerHTML = html
+				console.log('✅ Панель пользователя создана, элемент routeHistoryList должен быть доступен')
+				
+				// Загружаем историю после создания панели
+				setTimeout(() => {
+					loadRouteHistory()
+				}, 100)
 			}
 
 			/**
@@ -773,14 +783,19 @@
 			 * Получить историю маршрутов из БД
 			 */
 			async function getRouteHistory() {
-				if (!currentUser) return []
+				if (!currentUser) {
+					console.log('⚠️ getRouteHistory: пользователь не авторизован')
+					return []
+				}
 
 				try {
+					console.log('📡 Запрос истории маршрутов...')
 					const response = await fetch('api/route_history.php?limit=5', {
 						credentials: 'include'
 					})
 					
 					if (!response.ok) {
+						console.error('❌ Ошибка получения истории:', response.status)
 						if (response.status === 401) {
 							currentUser = null
 							showLoginPrompt()
@@ -789,7 +804,10 @@
 					}
 					
 					const data = await response.json()
-					return data.history || []
+					console.log('📡 Получена история:', data)
+					const history = data.history || []
+					console.log(`✅ Получено ${history.length} маршрутов из истории`)
+					return history
 				} catch (error) {
 					console.error('❌ Ошибка получения истории:', error)
 					return []
@@ -870,23 +888,33 @@
 			 * Загрузить и отобразить историю маршрутов
 			 */
 			async function loadRouteHistory() {
+				console.log('🔍 loadRouteHistory вызвана')
 				const historyList = document.getElementById('routeHistoryList')
-				if (!historyList) return
+				if (!historyList) {
+					console.warn('⚠️ Элемент routeHistoryList не найден')
+					return
+				}
 
 				if (!currentUser) {
+					console.log('ℹ️ Пользователь не авторизован, показываем приглашение')
 					historyList.innerHTML = '<div class="route-history-empty">Войдите для просмотра истории</div>'
 					return
 				}
 
+				console.log('📡 Загрузка истории для пользователя:', currentUser.login)
 				const history = await getRouteHistory()
+				console.log('📡 Загружена история:', history)
 
 				if (history.length === 0) {
+					console.log('ℹ️ История пуста')
 					historyList.innerHTML = '<div class="route-history-empty">История пуста</div>'
 					return
 				}
 
+				console.log(`✅ Отображение ${history.length} маршрутов в истории`)
 				let html = ''
 				history.forEach((item) => {
+					console.log('  - Маршрут:', item)
 					html += `
 						<div class="route-history-item" data-id="${item.id}">
 							<div class="route-history-item-content">
@@ -903,6 +931,7 @@
 				})
 
 				historyList.innerHTML = html
+				console.log('✅ HTML истории обновлен')
 
 				// Добавляем обработчики клика на элементы истории
 				historyList.querySelectorAll('.route-history-item').forEach((item) => {
