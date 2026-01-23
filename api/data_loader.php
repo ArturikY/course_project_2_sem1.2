@@ -363,7 +363,7 @@ class DataLoader {
     }
     
     /**
-     * Получить статистику из БД
+     * Получить статистику из БД (оптимизированная версия с одним запросом)
      */
     private function getHotspotsFromDB($bbox, $period, $threshold, $gridSize) {
         require_once __DIR__ . '/db.php';
@@ -386,11 +386,106 @@ class DataLoader {
             $dateFrom = null;
         }
         
+        // Вычисляем шаг сетки
+        $latStep = $gridSize / 111000;
+        $lonStep = $gridSize / (111000 * cos(deg2rad(($minLat + $maxLat) / 2)));
+        
+        // Оптимизация: используем один запрос с группировкой по ячейкам сетки
+        // Вычисляем индексы ячеек для каждой записи и группируем
+        $sql = "SELECT 
+            FLOOR((lat - ?) / ?) as lat_idx,
+            FLOOR((lon - ?) / ?) as lon_idx,
+            COUNT(*) as cnt,
+            SUM(CASE WHEN severity IN ('Тяжелый', 'Смертельный') THEN 1 ELSE 0 END) as severe_cnt,
+            MIN(lat) as minLat,
+            MAX(lat) as maxLat,
+            MIN(lon) as minLon,
+            MAX(lon) as maxLon
+        FROM accidents
+        WHERE lat BETWEEN ? AND ? 
+          AND lon BETWEEN ? AND ?";
+        
+        $params = [
+            $minLat, $latStep,  // для FLOOR lat
+            $minLon, $lonStep,  // для FLOOR lon
+            $minLat, $maxLat,   // для WHERE lat
+            $minLon, $maxLon    // для WHERE lon
+        ];
+        
+        if ($dateFrom) {
+            $sql .= " AND dt >= ?";
+            $params[] = $dateFrom;
+        }
+        
+        $sql .= " GROUP BY lat_idx, lon_idx HAVING cnt >= ?";
+        $params[] = $threshold;
+        
+        try {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($params);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $cells = [];
+            foreach ($results as $row) {
+                // Вычисляем точные границы ячейки
+                $latIdx = (int)$row['lat_idx'];
+                $lonIdx = (int)$row['lon_idx'];
+                
+                $cellMinLat = $minLat + $latIdx * $latStep;
+                $cellMaxLat = min($cellMinLat + $latStep, $maxLat);
+                $cellMinLon = $minLon + $lonIdx * $lonStep;
+                $cellMaxLon = min($cellMinLon + $lonStep, $maxLon);
+                
+                $cells[] = [
+                    'minLat' => $cellMinLat,
+                    'maxLat' => $cellMaxLat,
+                    'minLon' => $cellMinLon,
+                    'maxLon' => $cellMaxLon,
+                    'count' => (int)$row['cnt'],
+                    'severeCount' => (int)$row['severe_cnt']
+                ];
+            }
+            
+            return $cells;
+        } catch (PDOException $e) {
+            error_log("[getHotspotsFromDB] Ошибка SQL: " . $e->getMessage());
+            // Fallback на старый метод, если оптимизированный не работает
+            return $this->getHotspotsFromDBFallback($bbox, $period, $threshold, $gridSize);
+        }
+    }
+    
+    /**
+     * Fallback метод (старый способ, если оптимизированный не работает)
+     */
+    private function getHotspotsFromDBFallback($bbox, $period, $threshold, $gridSize) {
+        require_once __DIR__ . '/db.php';
+        $pdo = getDB();
+        
+        $bbox_parts = array_map('trim', explode(',', $bbox));
+        $minLon = (float)$bbox_parts[0];
+        $minLat = (float)$bbox_parts[1];
+        $maxLon = (float)$bbox_parts[2];
+        $maxLat = (float)$bbox_parts[3];
+        
+        // Парсим период
+        if ($period === 'all') {
+            $dateFrom = null;
+        } elseif (preg_match('/(\d+)d/', $period, $matches)) {
+            $days = (int)$matches[1];
+            $dateFrom = date('Y-m-d', strtotime("-$days days"));
+        } else {
+            $dateFrom = null;
+        }
+        
+        // Увеличиваем лимит времени выполнения для fallback
+        ini_set('max_execution_time', '300');
+        
         $latStep = $gridSize / 111000;
         $lonStep = $gridSize / (111000 * cos(deg2rad(($minLat + $maxLat) / 2)));
         
         $cells = [];
         $lat = $minLat;
+        $processed = 0;
         
         while ($lat < $maxLat) {
             $lon = $minLon;
@@ -435,6 +530,12 @@ class DataLoader {
                 }
                 
                 $lon += $lonStep;
+                $processed++;
+                
+                // Логируем прогресс каждые 100 ячеек
+                if ($processed % 100 === 0) {
+                    error_log("[getHotspotsFromDBFallback] Обработано ячеек: $processed");
+                }
             }
             $lat += $latStep;
         }
