@@ -687,7 +687,7 @@
 					if (data.authenticated && data.user) {
 						currentUser = data.user
 						showUserPanel()
-						loadRouteHistory()
+						await loadRouteHistory()
 						return true
 					} else {
 						showLoginPrompt()
@@ -735,8 +735,11 @@
 				userPanel.style.display = 'block'
 				
 				userPanelContent.innerHTML = `
+					<div style="color: #999; font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">
+						Вы не авторизованы
+					</div>
 					<a href="login.php" class="user-panel-login-link">Войти / Зарегистрироваться</a>
-					<div style="color: #999; font-size: 0.85rem; text-align: center;">
+					<div style="color: #999; font-size: 0.85rem; text-align: center; margin-top: 1rem;">
 						Войдите для сохранения истории маршрутов
 					</div>
 				`
@@ -1001,8 +1004,8 @@
 					// Загружаем зоны один раз при инициализации
 					loadHotspotsOnce()
 
-					// Загружаем историю маршрутов при инициализации
-					renderRouteHistory()
+					// Проверяем авторизацию и загружаем историю
+					checkAuth()
 
 					// Загрузка ДТП только при клике на зону
 					let loadTimeout = null

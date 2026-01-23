@@ -13,7 +13,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f5f5;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -23,9 +23,9 @@
         
         .auth-container {
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 2rem;
             width: 100%;
             max-width: 400px;
         }
@@ -71,7 +71,7 @@
         .btn {
             width: 100%;
             padding: 0.75rem;
-            background: #667eea;
+            background: #2ecc71;
             color: white;
             border: none;
             border-radius: 8px;
@@ -79,19 +79,32 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
         
         .btn:hover {
-            background: #5568d3;
+            background: #27ae60;
         }
         
         .btn-secondary {
             background: #95a5a6;
+            margin-bottom: 0.75rem;
         }
         
         .btn-secondary:hover {
             background: #7f8c8d;
+        }
+        
+        .btn-link {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+            margin-bottom: 0;
+        }
+        
+        .btn-link:hover {
+            background: #667eea;
+            color: white;
         }
         
         .error {
@@ -146,6 +159,10 @@
             
             <button type="submit" class="btn">Войти</button>
         </form>
+        
+        <button type="button" class="btn btn-link" onclick="window.location.href='index.html'">
+            Продолжить без авторизации
+        </button>
         
         <div class="links">
             <a href="register.php">Нет аккаунта? Зарегистрироваться</a>
