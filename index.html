@@ -261,6 +261,86 @@
 				font-size: 0.85rem;
 			}
 
+			/* История маршрутов */
+			.route-history {
+				margin-top: 1.5rem;
+				padding-top: 1.5rem;
+				border-top: 1px solid #eee;
+			}
+
+			.route-history h4 {
+				margin-bottom: 0.8rem;
+				font-size: 0.95rem;
+				color: #333;
+				font-weight: 600;
+			}
+
+			.route-history-item {
+				background: #f9f9f9;
+				border: 1px solid #e0e0e0;
+				border-radius: 6px;
+				padding: 0.7rem;
+				margin-bottom: 0.5rem;
+				cursor: pointer;
+				transition: all 0.2s;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-size: 0.85rem;
+			}
+
+			.route-history-item:hover {
+				background: #f0f0f0;
+				border-color: #667eea;
+				transform: translateX(2px);
+			}
+
+			.route-history-item-content {
+				flex: 1;
+				color: #555;
+			}
+
+			.route-history-item-from {
+				font-weight: 600;
+				color: #333;
+			}
+
+			.route-history-item-to {
+				margin-top: 0.2rem;
+				color: #666;
+			}
+
+			.route-history-item-delete {
+				background: #e74c3c;
+				color: white;
+				border: none;
+				border-radius: 4px;
+				width: 24px;
+				height: 24px;
+				cursor: pointer;
+				font-size: 14px;
+				line-height: 1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0;
+				margin-left: 0.5rem;
+				opacity: 0.7;
+				transition: opacity 0.2s;
+			}
+
+			.route-history-item-delete:hover {
+				opacity: 1;
+			}
+
+			.route-history-empty {
+				color: #999;
+				font-size: 0.85rem;
+				text-align: center;
+				padding: 1rem;
+				font-style: italic;
+			}
+
 			/* Панель результатов анализа маршрутов */
 			.route-safety-panel {
 				position: fixed;
@@ -454,6 +534,14 @@
 
 				</div>
 
+				<!-- История маршрутов -->
+				<div class="route-history">
+					<h4>📋 История маршрутов</h4>
+					<div id="routeHistoryList">
+						<div class="route-history-empty">История пуста</div>
+					</div>
+				</div>
+
 				<!-- Легенда уровней опасности -->
 				<div>
 					<h3
@@ -501,6 +589,149 @@
 			const FIXED_GRID_SIZE = 1000 // Размер сетки для расчёта опасных зон (метры)
 			const BASE_RADIUS = 500 // Базовый радиус для проверки пересечений (метры)
 			// Эти значения используются ТОЛЬКО для расчётов, не зависят от UI
+
+			// ============================================
+			// ИСТОРИЯ МАРШРУТОВ (localStorage)
+			// ============================================
+
+			const ROUTE_HISTORY_KEY = 'dtp_route_history'
+			const MAX_HISTORY_ITEMS = 5
+
+			/**
+			 * Получить историю маршрутов из localStorage
+			 */
+			function getRouteHistory() {
+				try {
+					const historyJson = localStorage.getItem(ROUTE_HISTORY_KEY)
+					if (!historyJson) return []
+					const history = JSON.parse(historyJson)
+					return Array.isArray(history) ? history : []
+				} catch (e) {
+					console.error('❌ Ошибка чтения истории маршрутов:', e)
+					return []
+				}
+			}
+
+			/**
+			 * Сохранить историю маршрутов в localStorage
+			 */
+			function saveRouteHistory(history) {
+				try {
+					localStorage.setItem(ROUTE_HISTORY_KEY, JSON.stringify(history))
+				} catch (e) {
+					console.error('❌ Ошибка сохранения истории маршрутов:', e)
+				}
+			}
+
+			/**
+			 * Добавить маршрут в историю
+			 */
+			function addRouteToHistory(from, to) {
+				if (!from || !to) return
+
+				const history = getRouteHistory()
+				
+				// Удаляем дубликат, если есть (обновляем позицию)
+				const existingIndex = history.findIndex(
+					item => item.from === from && item.to === to
+				)
+				if (existingIndex !== -1) {
+					history.splice(existingIndex, 1)
+				}
+
+				// Добавляем в начало
+				history.unshift({ from, to })
+
+				// Ограничиваем количество (последние 5)
+				if (history.length > MAX_HISTORY_ITEMS) {
+					history.splice(MAX_HISTORY_ITEMS)
+				}
+
+				saveRouteHistory(history)
+				renderRouteHistory()
+			}
+
+			/**
+			 * Удалить маршрут из истории
+			 */
+			function removeRouteFromHistory(index) {
+				const history = getRouteHistory()
+				if (index >= 0 && index < history.length) {
+					history.splice(index, 1)
+					saveRouteHistory(history)
+					renderRouteHistory()
+				}
+			}
+
+			/**
+			 * Отобразить историю маршрутов
+			 */
+			function renderRouteHistory() {
+				const historyList = document.getElementById('routeHistoryList')
+				if (!historyList) return
+
+				const history = getRouteHistory()
+
+				if (history.length === 0) {
+					historyList.innerHTML = '<div class="route-history-empty">История пуста</div>'
+					return
+				}
+
+				let html = ''
+				history.forEach((item, index) => {
+					html += `
+						<div class="route-history-item" data-index="${index}">
+							<div class="route-history-item-content">
+								<div class="route-history-item-from">От: ${item.from}</div>
+								<div class="route-history-item-to">К: ${item.to}</div>
+							</div>
+							<button 
+								class="route-history-item-delete" 
+								onclick="event.stopPropagation(); removeRouteFromHistory(${index})"
+								title="Удалить из истории"
+							>×</button>
+						</div>
+					`
+				})
+
+				historyList.innerHTML = html
+
+				// Добавляем обработчики клика на элементы истории
+				historyList.querySelectorAll('.route-history-item').forEach((item, index) => {
+					item.addEventListener('click', function (e) {
+						// Игнорируем клик, если кликнули на кнопку удаления
+						if (e.target.classList.contains('route-history-item-delete')) {
+							return
+						}
+						const route = history[index]
+						if (route) {
+							loadRouteFromHistory(route.from, route.to)
+						}
+					})
+				})
+			}
+
+			/**
+			 * Загрузить маршрут из истории и запустить анализ
+			 */
+			async function loadRouteFromHistory(from, to) {
+				// Заполняем поля
+				const routeFromInput = document.getElementById('routeFrom')
+				const routeToInput = document.getElementById('routeTo')
+				if (routeFromInput) routeFromInput.value = from
+				if (routeToInput) routeToInput.value = to
+
+				// Показываем панель результатов
+				const panel = document.querySelector('.route-safety-panel')
+				if (panel) {
+					panel.style.display = 'block'
+				}
+
+				console.log('✅ Загрузка маршрута из истории:', from, '->', to)
+
+				// Сразу запускаем анализ
+				await createRouteForAnalysis(from, to)
+			}
 
 			// Инициализация карты
 			ymaps.ready(function () {
@@ -586,6 +817,9 @@
 
 					// Загружаем зоны один раз при инициализации
 					loadHotspotsOnce()
+
+					// Загружаем историю маршрутов при инициализации
+					renderRouteHistory()
 
 					// Загрузка ДТП только при клике на зону
 					let loadTimeout = null
@@ -2250,6 +2484,12 @@
 						try {
 							// Анализируем все маршруты асинхронно
 							await analyzeRoutes()
+							
+							// Сохраняем маршрут в историю после успешного построения
+							if (addToMap && from && to) {
+								addRouteToHistory(from, to)
+							}
+							
 							// Убираем загрузку после завершения анализа
 							const loading = document.getElementById('loading')
 							if (loading) loading.classList.remove('active')
