@@ -341,6 +341,33 @@
 				font-style: italic;
 			}
 
+			/* Контейнер истории с ограничением высоты и скроллом */
+			/* Высота: 3 элемента по ~60px + отступы = ~200px */
+			#routeHistoryList {
+				max-height: 200px;
+				overflow-y: auto;
+				overflow-x: hidden;
+				padding-right: 4px;
+			}
+
+			#routeHistoryList::-webkit-scrollbar {
+				width: 6px;
+			}
+
+			#routeHistoryList::-webkit-scrollbar-track {
+				background: #f1f1f1;
+				border-radius: 3px;
+			}
+
+			#routeHistoryList::-webkit-scrollbar-thumb {
+				background: #888;
+				border-radius: 3px;
+			}
+
+			#routeHistoryList::-webkit-scrollbar-thumb:hover {
+				background: #555;
+			}
+
 			/* Блок пользователя в левом нижнем углу */
 			.user-panel {
 				position: fixed;
@@ -952,22 +979,36 @@
 			 * Загрузить маршрут из истории и запустить анализ
 			 */
 			async function loadRouteFromHistory(from, to) {
+				console.log('🔍 loadRouteFromHistory вызвана:', { from, to })
+				
 				// Заполняем поля
 				const routeFromInput = document.getElementById('routeFrom')
 				const routeToInput = document.getElementById('routeTo')
-				if (routeFromInput) routeFromInput.value = from
-				if (routeToInput) routeToInput.value = to
+				if (routeFromInput) {
+					routeFromInput.value = from
+					console.log('✅ Поле "От" заполнено:', from)
+				}
+				if (routeToInput) {
+					routeToInput.value = to
+					console.log('✅ Поле "К" заполнено:', to)
+				}
 
 				// Показываем панель результатов
 				const panel = document.querySelector('.route-safety-panel')
 				if (panel) {
 					panel.style.display = 'block'
+					console.log('✅ Панель результатов показана')
 				}
 
 				console.log('✅ Загрузка маршрута из истории:', from, '->', to)
 
 				// Сразу запускаем анализ
-				await createRouteForAnalysis(from, to)
+				try {
+					await createRouteForAnalysis(from, to, true)
+					console.log('✅ Маршрут построен из истории')
+				} catch (error) {
+					console.error('❌ Ошибка построения маршрута из истории:', error)
+				}
 			}
 
 			// Инициализация карты
