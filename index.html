@@ -679,17 +679,21 @@
 			 */
 			async function checkAuth() {
 				try {
+					console.log('🔍 Проверка авторизации...')
 					const response = await fetch('api/auth.php?action=check', {
 						credentials: 'include'
 					})
 					const data = await response.json()
+					console.log('🔍 Результат проверки авторизации:', data)
 					
 					if (data.authenticated && data.user) {
 						currentUser = data.user
+						console.log('✅ Пользователь авторизован:', currentUser)
 						showUserPanel()
 						await loadRouteHistory()
 						return true
 					} else {
+						console.log('ℹ️ Пользователь не авторизован')
 						showLoginPrompt()
 						return false
 					}
@@ -796,25 +800,43 @@
 			 * Добавить маршрут в историю (БД)
 			 */
 			async function addRouteToHistory(from, to) {
-				if (!from || !to || !currentUser) return
+				console.log('🔍 addRouteToHistory вызвана:', { from, to, currentUser })
+				
+				if (!from || !to) {
+					console.warn('⚠️ Не указаны адреса маршрута')
+					return
+				}
+				
+				if (!currentUser) {
+					console.log('ℹ️ Пользователь не авторизован, история не сохраняется')
+					return
+				}
 
 				try {
 					const formData = new FormData()
 					formData.append('from', from)
 					formData.append('to', to)
 					
+					console.log('📡 Отправка запроса на сохранение маршрута в историю...')
 					const response = await fetch('api/route_history.php', {
 						method: 'POST',
 						body: formData,
 						credentials: 'include'
 					})
 					
-					if (response.ok) {
+					const data = await response.json()
+					console.log('📡 Ответ сервера:', { status: response.status, data })
+					
+					if (response.ok && data.success) {
+						console.log('✅ Маршрут сохранен в историю')
 						// Перезагружаем историю
 						await loadRouteHistory()
 					} else if (response.status === 401) {
+						console.warn('⚠️ Требуется авторизация')
 						currentUser = null
 						showLoginPrompt()
+					} else {
+						console.error('❌ Ошибка сохранения:', data.error || 'Unknown error')
 					}
 				} catch (error) {
 					console.error('❌ Ошибка сохранения маршрута в историю:', error)

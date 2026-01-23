@@ -74,7 +74,11 @@ function addRouteToHistory($pdo, $userId) {
     $from = isset($_POST['from']) ? trim($_POST['from']) : '';
     $to = isset($_POST['to']) ? trim($_POST['to']) : '';
     
+    // Логирование для отладки
+    error_log("[route_history] addRouteToHistory: user_id=$userId, from='$from', to='$to'");
+    
     if (empty($from) || empty($to)) {
+        error_log("[route_history] Ошибка: пустые адреса");
         http_response_code(400);
         echo json_encode(['error' => 'Адреса обязательны'], JSON_UNESCAPED_UNICODE);
         return;
@@ -88,7 +92,7 @@ function addRouteToHistory($pdo, $userId) {
         LIMIT 1
     ");
     $stmt->execute([$userId, $from, $to]);
-    $existing = $stmt->fetch();
+    $existing = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if ($existing) {
         // Обновляем время последнего использования
