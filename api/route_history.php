@@ -51,23 +51,45 @@ try {
 }
 
 function getRouteHistory($pdo, $userId) {
-    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 5;
-    $limit = max(1, min(50, $limit)); // Ограничиваем от 1 до 50
-    
-    $stmt = $pdo->prepare("
-        SELECT id, from_address, to_address, created_at 
-        FROM route_history 
-        WHERE user_id = ? 
-        ORDER BY created_at DESC 
-        LIMIT ?
-    ");
-    $stmt->execute([$userId, $limit]);
-    $history = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    echo json_encode([
-        'success' => true,
-        'history' => $history
-    ], JSON_UNESCAPED_UNICODE);
+    try {
+        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 5;
+        $limit = max(1, min(50, $limit)); // Ограничиваем от 1 до 50
+        
+        error_log("[route_history] getRouteHistory: user_id=$userId, limit=$limit");
+        
+        // В MySQL LIMIT не может быть параметром, поэтому используем безопасную конкатенацию
+        // $limit уже проверен и приведен к int, поэтому безопасно
+        $sql = "
+            SELECT id, from_address, to_address, created_at 
+            FROM route_history 
+            WHERE user_id = ? 
+            ORDER BY created_at DESC 
+            LIMIT " . (int)$limit . "
+        ";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$userId]);
+        $history = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        error_log("[route_history] Получено записей: " . count($history));
+        
+        echo json_encode([
+            'success' => true,
+            'history' => $history
+        ], JSON_UNESCAPED_UNICODE);
+    } catch (PDOException $e) {
+        error_log("[route_history] Ошибка SQL: " . $e->getMessage());
+        http_response_code(500);
+        echo json_encode([
+            'error' => 'Ошибка получения истории: ' . $e->getMessage()
+        ], JSON_UNESCAPED_UNICODE);
+    } catch (Exception $e) {
+        error_log("[route_history] Ошибка: " . $e->getMessage());
+        http_response_code(500);
+        echo json_encode([
+            'error' => 'Ошибка: ' . $e->getMessage()
+        ], JSON_UNESCAPED_UNICODE);
+    }
 }
 
 function addRouteToHistory($pdo, $userId) {
