@@ -341,6 +341,82 @@
 				font-style: italic;
 			}
 
+			/* Блок пользователя в левом нижнем углу */
+			.user-panel {
+				position: fixed;
+				bottom: 20px;
+				left: 20px;
+				background: white;
+				padding: 1.5rem;
+				border-radius: 12px;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+				z-index: 1000;
+				min-width: 280px;
+				max-width: 320px;
+				max-height: 60vh;
+				overflow-y: auto;
+			}
+
+			.user-panel-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 1rem;
+				padding-bottom: 1rem;
+				border-bottom: 1px solid #eee;
+			}
+
+			.user-panel-header h4 {
+				margin: 0;
+				color: #333;
+				font-size: 1rem;
+			}
+
+			.user-login {
+				color: #667eea;
+				font-weight: 600;
+				margin-bottom: 0.5rem;
+			}
+
+			.user-panel-logout {
+				background: #e74c3c;
+				color: white;
+				border: none;
+				border-radius: 6px;
+				padding: 0.4rem 0.8rem;
+				cursor: pointer;
+				font-size: 0.85rem;
+				transition: background 0.2s;
+			}
+
+			.user-panel-logout:hover {
+				background: #c0392b;
+			}
+
+			.user-panel-login-link {
+				display: block;
+				text-align: center;
+				padding: 0.75rem;
+				background: #667eea;
+				color: white;
+				text-decoration: none;
+				border-radius: 8px;
+				font-weight: 600;
+				margin-bottom: 1rem;
+				transition: background 0.2s;
+			}
+
+			.user-panel-login-link:hover {
+				background: #5568d3;
+			}
+
+			.user-history-title {
+				font-size: 0.9rem;
+				color: #666;
+				margin-bottom: 0.75rem;
+				font-weight: 600;
+			}
+
 			/* Панель результатов анализа маршрутов */
 			.route-safety-panel {
 				position: fixed;
@@ -436,6 +512,16 @@
 			<div class="loading" id="loading">
 				<div class="loading-spinner"></div>
 				<div class="loading-text">Загрузка данных...</div>
+			</div>
+
+			<!-- Блок пользователя в левом нижнем углу -->
+			<div class="user-panel" id="userPanel" style="display: none;">
+				<div class="user-panel-header">
+					<h4>👤 Пользователь</h4>
+				</div>
+				<div id="userPanelContent">
+					<!-- Контент будет загружен через JavaScript -->
+				</div>
 			</div>
 
 			<div class="legend">
@@ -534,14 +620,6 @@
 
 				</div>
 
-				<!-- История маршрутов -->
-				<div class="route-history">
-					<h4>📋 История маршрутов</h4>
-					<div id="routeHistoryList">
-						<div class="route-history-empty">История пуста</div>
-					</div>
-				</div>
-
 				<!-- Легенда уровней опасности -->
 				<div>
 					<h3
@@ -591,86 +669,191 @@
 			// Эти значения используются ТОЛЬКО для расчётов, не зависят от UI
 
 			// ============================================
-			// ИСТОРИЯ МАРШРУТОВ (localStorage)
+			// АВТОРИЗАЦИЯ И ИСТОРИЯ МАРШРУТОВ (БД)
 			// ============================================
 
-			const ROUTE_HISTORY_KEY = 'dtp_route_history'
-			const MAX_HISTORY_ITEMS = 5
+			let currentUser = null
 
 			/**
-			 * Получить историю маршрутов из localStorage
+			 * Проверить авторизацию пользователя
 			 */
-			function getRouteHistory() {
+			async function checkAuth() {
 				try {
-					const historyJson = localStorage.getItem(ROUTE_HISTORY_KEY)
-					if (!historyJson) return []
-					const history = JSON.parse(historyJson)
-					return Array.isArray(history) ? history : []
-				} catch (e) {
-					console.error('❌ Ошибка чтения истории маршрутов:', e)
+					const response = await fetch('api/auth.php?action=check', {
+						credentials: 'include'
+					})
+					const data = await response.json()
+					
+					if (data.authenticated && data.user) {
+						currentUser = data.user
+						showUserPanel()
+						loadRouteHistory()
+						return true
+					} else {
+						showLoginPrompt()
+						return false
+					}
+				} catch (error) {
+					console.error('❌ Ошибка проверки авторизации:', error)
+					showLoginPrompt()
+					return false
+				}
+			}
+
+			/**
+			 * Показать панель пользователя
+			 */
+			function showUserPanel() {
+				const userPanel = document.getElementById('userPanel')
+				const userPanelContent = document.getElementById('userPanelContent')
+				
+				if (!userPanel || !userPanelContent || !currentUser) return
+
+				userPanel.style.display = 'block'
+				
+				let html = `
+					<div class="user-login">👤 ${currentUser.login}</div>
+					<button class="user-panel-logout" onclick="logout()">Выйти</button>
+					<div class="user-history-title" style="margin-top: 1rem;">📋 История маршрутов</div>
+					<div id="routeHistoryList">
+						<div class="route-history-empty">Загрузка...</div>
+					</div>
+				`
+				
+				userPanelContent.innerHTML = html
+			}
+
+			/**
+			 * Показать приглашение войти
+			 */
+			function showLoginPrompt() {
+				const userPanel = document.getElementById('userPanel')
+				const userPanelContent = document.getElementById('userPanelContent')
+				
+				if (!userPanel || !userPanelContent) return
+
+				userPanel.style.display = 'block'
+				
+				userPanelContent.innerHTML = `
+					<a href="login.php" class="user-panel-login-link">Войти / Зарегистрироваться</a>
+					<div style="color: #999; font-size: 0.85rem; text-align: center;">
+						Войдите для сохранения истории маршрутов
+					</div>
+				`
+			}
+
+			/**
+			 * Выход из системы
+			 */
+			async function logout() {
+				try {
+					await fetch('api/auth.php?action=logout', {
+						method: 'POST',
+						credentials: 'include'
+					})
+					currentUser = null
+					showLoginPrompt()
+					const historyList = document.getElementById('routeHistoryList')
+					if (historyList) {
+						historyList.innerHTML = '<div class="route-history-empty">История пуста</div>'
+					}
+				} catch (error) {
+					console.error('❌ Ошибка выхода:', error)
+				}
+			}
+
+			/**
+			 * Получить историю маршрутов из БД
+			 */
+			async function getRouteHistory() {
+				if (!currentUser) return []
+
+				try {
+					const response = await fetch('api/route_history.php?limit=5', {
+						credentials: 'include'
+					})
+					
+					if (!response.ok) {
+						if (response.status === 401) {
+							currentUser = null
+							showLoginPrompt()
+						}
+						return []
+					}
+					
+					const data = await response.json()
+					return data.history || []
+				} catch (error) {
+					console.error('❌ Ошибка получения истории:', error)
 					return []
 				}
 			}
 
 			/**
-			 * Сохранить историю маршрутов в localStorage
+			 * Добавить маршрут в историю (БД)
 			 */
-			function saveRouteHistory(history) {
+			async function addRouteToHistory(from, to) {
+				if (!from || !to || !currentUser) return
+
 				try {
-					localStorage.setItem(ROUTE_HISTORY_KEY, JSON.stringify(history))
-				} catch (e) {
-					console.error('❌ Ошибка сохранения истории маршрутов:', e)
+					const formData = new FormData()
+					formData.append('from', from)
+					formData.append('to', to)
+					
+					const response = await fetch('api/route_history.php', {
+						method: 'POST',
+						body: formData,
+						credentials: 'include'
+					})
+					
+					if (response.ok) {
+						// Перезагружаем историю
+						await loadRouteHistory()
+					} else if (response.status === 401) {
+						currentUser = null
+						showLoginPrompt()
+					}
+				} catch (error) {
+					console.error('❌ Ошибка сохранения маршрута в историю:', error)
 				}
-			}
-
-			/**
-			 * Добавить маршрут в историю
-			 */
-			function addRouteToHistory(from, to) {
-				if (!from || !to) return
-
-				const history = getRouteHistory()
-				
-				// Удаляем дубликат, если есть (обновляем позицию)
-				const existingIndex = history.findIndex(
-					item => item.from === from && item.to === to
-				)
-				if (existingIndex !== -1) {
-					history.splice(existingIndex, 1)
-				}
-
-				// Добавляем в начало
-				history.unshift({ from, to })
-
-				// Ограничиваем количество (последние 5)
-				if (history.length > MAX_HISTORY_ITEMS) {
-					history.splice(MAX_HISTORY_ITEMS)
-				}
-
-				saveRouteHistory(history)
-				renderRouteHistory()
 			}
 
 			/**
 			 * Удалить маршрут из истории
 			 */
-			function removeRouteFromHistory(index) {
-				const history = getRouteHistory()
-				if (index >= 0 && index < history.length) {
-					history.splice(index, 1)
-					saveRouteHistory(history)
-					renderRouteHistory()
+			async function removeRouteFromHistory(routeId) {
+				if (!currentUser) return
+
+				try {
+					const response = await fetch(`api/route_history.php?id=${routeId}`, {
+						method: 'DELETE',
+						credentials: 'include'
+					})
+					
+					if (response.ok) {
+						await loadRouteHistory()
+					} else if (response.status === 401) {
+						currentUser = null
+						showLoginPrompt()
+					}
+				} catch (error) {
+					console.error('❌ Ошибка удаления маршрута:', error)
 				}
 			}
 
 			/**
-			 * Отобразить историю маршрутов
+			 * Загрузить и отобразить историю маршрутов
 			 */
-			function renderRouteHistory() {
+			async function loadRouteHistory() {
 				const historyList = document.getElementById('routeHistoryList')
 				if (!historyList) return
 
-				const history = getRouteHistory()
+				if (!currentUser) {
+					historyList.innerHTML = '<div class="route-history-empty">Войдите для просмотра истории</div>'
+					return
+				}
+
+				const history = await getRouteHistory()
 
 				if (history.length === 0) {
 					historyList.innerHTML = '<div class="route-history-empty">История пуста</div>'
@@ -678,16 +861,16 @@
 				}
 
 				let html = ''
-				history.forEach((item, index) => {
+				history.forEach((item) => {
 					html += `
-						<div class="route-history-item" data-index="${index}">
+						<div class="route-history-item" data-id="${item.id}">
 							<div class="route-history-item-content">
-								<div class="route-history-item-from">От: ${item.from}</div>
-								<div class="route-history-item-to">К: ${item.to}</div>
+								<div class="route-history-item-from">От: ${item.from_address}</div>
+								<div class="route-history-item-to">К: ${item.to_address}</div>
 							</div>
 							<button 
 								class="route-history-item-delete" 
-								onclick="event.stopPropagation(); removeRouteFromHistory(${index})"
+								onclick="event.stopPropagation(); removeRouteFromHistory(${item.id})"
 								title="Удалить из истории"
 							>×</button>
 						</div>
@@ -697,15 +880,15 @@
 				historyList.innerHTML = html
 
 				// Добавляем обработчики клика на элементы истории
-				historyList.querySelectorAll('.route-history-item').forEach((item, index) => {
+				historyList.querySelectorAll('.route-history-item').forEach((item) => {
 					item.addEventListener('click', function (e) {
-						// Игнорируем клик, если кликнули на кнопку удаления
 						if (e.target.classList.contains('route-history-item-delete')) {
 							return
 						}
-						const route = history[index]
+						const routeId = parseInt(this.dataset.id)
+						const route = history.find(r => r.id === routeId)
 						if (route) {
-							loadRouteFromHistory(route.from, route.to)
+							loadRouteFromHistory(route.from_address, route.to_address)
 						}
 					})
 				})
@@ -2487,7 +2670,7 @@
 							
 							// Сохраняем маршрут в историю после успешного построения
 							if (addToMap && from && to) {
-								addRouteToHistory(from, to)
+								await addRouteToHistory(from, to)
 							}
 							
 							// Убираем загрузку после завершения анализа
