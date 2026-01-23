@@ -146,3 +146,7 @@ api/hotspots.php?bbox=37.3,55.5,37.8,56.0&period=30d&threshold=5&grid=250
 
 
 
+
+
+
+

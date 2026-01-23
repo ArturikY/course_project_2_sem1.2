@@ -225,3 +225,7 @@ $centerLon = array_sum($accidentsInCell['lon']) / count($accidentsInCell);
 **Дата:** 2026-01-22  
 **Статус:** Объяснение без изменений кода
 
+
+
+
+
