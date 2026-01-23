@@ -942,15 +942,22 @@
 				let html = ''
 				history.forEach((item) => {
 					console.log('  - Маршрут:', item)
+					// Используем onclick прямо в HTML для надежности
+					// Экранируем кавычки в адресах для безопасной вставки в onclick
+					const fromEscaped = item.from_address.replace(/'/g, "\\'").replace(/"/g, '&quot;')
+					const toEscaped = item.to_address.replace(/'/g, "\\'").replace(/"/g, '&quot;')
+					
 					html += `
-						<div class="route-history-item" data-id="${item.id}">
+						<div class="route-history-item" 
+							 data-id="${item.id}"
+							 onclick="handleHistoryItemClick('${fromEscaped}', '${toEscaped}')">
 							<div class="route-history-item-content">
 								<div class="route-history-item-from">От: ${item.from_address}</div>
 								<div class="route-history-item-to">К: ${item.to_address}</div>
 							</div>
 							<button 
 								class="route-history-item-delete" 
-								onclick="event.stopPropagation(); removeRouteFromHistory(${item.id})"
+								onclick="event.stopPropagation(); event.preventDefault(); removeRouteFromHistory(${item.id})"
 								title="Удалить из истории"
 							>×</button>
 						</div>
@@ -959,20 +966,22 @@
 
 				historyList.innerHTML = html
 				console.log('✅ HTML истории обновлен')
+			}
 
-				// Добавляем обработчики клика на элементы истории
-				historyList.querySelectorAll('.route-history-item').forEach((item) => {
-					item.addEventListener('click', function (e) {
-						if (e.target.classList.contains('route-history-item-delete')) {
-							return
-						}
-						const routeId = parseInt(this.dataset.id)
-						const route = history.find(r => r.id === routeId)
-						if (route) {
-							loadRouteFromHistory(route.from_address, route.to_address)
-						}
-					})
-				})
+			/**
+			 * Обработчик клика на элемент истории (глобальная функция для onclick)
+			 */
+			window.handleHistoryItemClick = async function(from, to) {
+				console.log('🔍 handleHistoryItemClick вызвана:', { from, to })
+				try {
+					if (window.event) {
+						window.event.stopPropagation()
+						window.event.preventDefault()
+					}
+					await loadRouteFromHistory(from, to)
+				} catch (error) {
+					console.error('❌ Ошибка в handleHistoryItemClick:', error)
+				}
 			}
 
 			/**
@@ -1004,10 +1013,12 @@
 
 				// Сразу запускаем анализ
 				try {
+					console.log('🚀 Вызов createRouteForAnalysis с параметрами:', { from, to, addToMap: true })
 					await createRouteForAnalysis(from, to, true)
 					console.log('✅ Маршрут построен из истории')
 				} catch (error) {
 					console.error('❌ Ошибка построения маршрута из истории:', error)
+					console.error('Stack:', error.stack)
 				}
 			}
 
