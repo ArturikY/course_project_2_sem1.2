@@ -16,3 +16,4 @@ CREATE INDEX IF NOT EXISTS idx_lat_lon ON accidents (lat, lon);
 -- Проверка индексов
 SHOW INDEX FROM accidents;
 
+
