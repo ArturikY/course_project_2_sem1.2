@@ -368,6 +368,82 @@
 				background: #555;
 			}
 
+			/* Кнопки для открытия панелей на мобильных */
+			.mobile-toggle-btn {
+				position: fixed;
+				background: white;
+				border: none;
+				border-radius: 50%;
+				width: 56px;
+				height: 56px;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+				cursor: pointer;
+				z-index: 1500;
+				display: none;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.5rem;
+				transition: all 0.3s;
+			}
+
+			.mobile-toggle-btn:hover {
+				transform: scale(1.1);
+				box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+			}
+
+			.mobile-toggle-btn.settings-btn {
+				bottom: 20px;
+				right: 20px;
+			}
+
+			.mobile-toggle-btn.user-btn {
+				bottom: 20px;
+				left: 20px;
+			}
+
+			/* Overlay для затемнения фона */
+			.panel-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.5);
+				z-index: 1400;
+				display: none;
+				opacity: 0;
+				transition: opacity 0.3s;
+			}
+
+			.panel-overlay.active {
+				display: block;
+				opacity: 1;
+			}
+
+			/* Кнопка закрытия панели */
+			.panel-close-btn {
+				position: absolute;
+				top: 1rem;
+				right: 1rem;
+				background: #e74c3c;
+				color: white;
+				border: none;
+				border-radius: 50%;
+				width: 32px;
+				height: 32px;
+				cursor: pointer;
+				font-size: 1.2rem;
+				line-height: 1;
+				display: none;
+				align-items: center;
+				justify-content: center;
+				transition: background 0.2s;
+			}
+
+			.panel-close-btn:hover {
+				background: #c0392b;
+			}
+
 			/* Блок пользователя в левом нижнем углу */
 			.user-panel {
 				position: fixed;
@@ -377,11 +453,12 @@
 				padding: 1.5rem;
 				border-radius: 12px;
 				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-				z-index: 1000;
+				z-index: 1500;
 				min-width: 280px;
 				max-width: 320px;
 				max-height: 60vh;
 				overflow-y: auto;
+				transition: transform 0.3s ease-out;
 			}
 
 			.user-panel-header {
@@ -541,14 +618,19 @@
 			}
 
 			@media (max-width: 992px) {
+				/* Показываем кнопки для открытия панелей на планшетах */
+				.mobile-toggle-btn {
+					display: flex;
+				}
+
 				.legend {
-					max-width: 300px;
+					max-width: 350px;
 					padding: 1.2rem;
 				}
 
 				.user-panel {
-					max-width: 300px;
-					min-width: 260px;
+					max-width: 350px;
+					min-width: 300px;
 				}
 
 				.route-safety-panel {
@@ -562,23 +644,115 @@
 				}
 			}
 
-			@media (max-width: 768px) {
+			@media (min-width: 769px) and (max-width: 992px) {
+				/* На планшетах панели выезжают сбоку */
 				.legend {
-					bottom: 10px;
-					right: 10px;
-					left: 10px;
-					max-width: none;
-					min-width: auto;
-					padding: 1rem;
+					bottom: auto;
+					right: 0;
+					left: auto;
+					top: 0;
+					width: 70%;
+					max-width: 400px;
+					height: 100vh;
+					max-height: none;
+					transform: translateX(100%);
+					transition: transform 0.3s ease-out;
+					border-radius: 0;
+					z-index: 1500;
+					overflow-y: auto;
+				}
+
+				.legend.open {
+					transform: translateX(0);
 				}
 
 				.user-panel {
-					bottom: 10px;
-					left: 10px;
-					right: 10px;
-					max-width: none;
+					bottom: auto;
+					left: 0;
+					right: auto;
+					top: 0;
+					width: 70%;
+					max-width: 400px;
+					height: 100vh;
+					max-height: none;
+					transform: translateX(-100%);
+					transition: transform 0.3s ease-out;
+					border-radius: 0;
+					z-index: 1500;
+					overflow-y: auto;
+				}
+
+				.user-panel.open {
+					transform: translateX(0);
+				}
+
+				.panel-close-btn {
+					display: flex;
+				}
+
+				.legend h3 {
+					margin-top: 2rem;
+				}
+
+				.user-panel-header h4 {
+					margin-top: 2rem;
+				}
+			}
+
+			@media (max-width: 768px) {
+				/* Показываем кнопки для открытия панелей */
+				.mobile-toggle-btn {
+					display: flex;
+				}
+
+				/* Скрываем панели по умолчанию */
+				.legend {
+					bottom: auto;
+					right: 0;
+					left: auto;
+					top: 0;
+					width: 85%;
+					max-width: 400px;
+					height: 100vh;
+					max-height: none;
 					min-width: auto;
-					max-height: 50vh;
+					padding: 1rem;
+					transform: translateX(100%);
+					transition: transform 0.3s ease-out;
+					border-radius: 0;
+					z-index: 1500;
+					overflow-y: auto;
+				}
+
+				.legend.open {
+					transform: translateX(0);
+				}
+
+				.user-panel {
+					bottom: auto;
+					left: 0;
+					right: auto;
+					top: 0;
+					width: 85%;
+					max-width: 400px;
+					height: 100vh;
+					max-height: none;
+					min-width: auto;
+					padding: 1rem;
+					transform: translateX(-100%);
+					transition: transform 0.3s ease-out;
+					border-radius: 0;
+					z-index: 1500;
+					overflow-y: auto;
+				}
+
+				.user-panel.open {
+					transform: translateX(0);
+				}
+
+				/* Кнопка закрытия видна на мобильных */
+				.panel-close-btn {
+					display: flex;
 				}
 
 				.route-safety-panel {
@@ -601,14 +775,16 @@
 				.data-source {
 					top: 10px;
 					right: 10px;
-					left: 10px;
-					text-align: center;
+					left: auto;
+					text-align: left;
 					padding: 0.5rem;
 					font-size: 0.65rem;
+					max-width: 200px;
 				}
 
 				.legend h3 {
 					font-size: 1rem;
+					margin-top: 2rem;
 				}
 
 				.legend-form-group label {
@@ -624,6 +800,10 @@
 				.btn {
 					padding: 0.75rem;
 					font-size: 0.9rem;
+				}
+
+				.user-panel-header h4 {
+					margin-top: 2rem;
 				}
 			}
 
@@ -717,6 +897,17 @@
 				<div class="loading-text">Загрузка данных...</div>
 			</div>
 
+			<!-- Overlay для затемнения фона -->
+			<div class="panel-overlay" id="panelOverlay" onclick="closeAllPanels()"></div>
+
+			<!-- Кнопки для открытия панелей на мобильных -->
+			<button class="mobile-toggle-btn settings-btn" id="settingsToggleBtn" onclick="toggleSettingsPanel()" title="Настройки">
+				⚙️
+			</button>
+			<button class="mobile-toggle-btn user-btn" id="userToggleBtn" onclick="toggleUserPanel()" title="Пользователь">
+				👤
+			</button>
+
 			<!-- Блок источника данных в правом верхнем углу -->
 			<div class="data-source">
 				Данные взяты с сайта <a href="https://dtp-stat.ru/opendata" target="_blank" rel="noopener noreferrer">dtp-stat.ru/opendata</a>
@@ -724,6 +915,7 @@
 
 			<!-- Блок пользователя в левом нижнем углу -->
 			<div class="user-panel" id="userPanel" style="display: none;">
+				<button class="panel-close-btn" onclick="closeUserPanel()">×</button>
 				<div class="user-panel-header">
 					<h4>👤 Пользователь</h4>
 				</div>
@@ -732,7 +924,8 @@
 				</div>
 			</div>
 
-			<div class="legend">
+			<div class="legend" id="legendPanel">
+				<button class="panel-close-btn" onclick="closeSettingsPanel()">×</button>
 				<h3>⚙️ Настройки</h3>
 
 				<!-- Форма с настройками -->
@@ -927,6 +1120,11 @@
 				console.log('✅ Отображение панели пользователя для:', currentUser.login)
 				userPanel.style.display = 'block'
 				
+				// На мобильных не открываем автоматически, только показываем кнопку
+				if (window.innerWidth > 768) {
+					// На десктопе панель видна всегда
+				}
+				
 				let html = `
 					<div class="user-login">👤 ${currentUser.login}</div>
 					<button class="user-panel-logout" onclick="logout()">Выйти</button>
@@ -955,6 +1153,11 @@
 				if (!userPanel || !userPanelContent) return
 
 				userPanel.style.display = 'block'
+				
+				// На мобильных не открываем автоматически, только показываем кнопку
+				if (window.innerWidth > 768) {
+					// На десктопе панель видна всегда
+				}
 				
 				userPanelContent.innerHTML = `
 					<div style="color: #999; font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">
@@ -1202,6 +1405,96 @@
 					console.error('Stack:', error.stack)
 				}
 			}
+
+			// ============================================
+			// УПРАВЛЕНИЕ ПАНЕЛЯМИ НА МОБИЛЬНЫХ
+			// ============================================
+
+			/**
+			 * Открыть/закрыть панель настроек
+			 */
+			function toggleSettingsPanel() {
+				const panel = document.getElementById('legendPanel')
+				const overlay = document.getElementById('panelOverlay')
+				
+				if (panel && overlay) {
+					if (panel.classList.contains('open')) {
+						closeSettingsPanel()
+					} else {
+						closeAllPanels() // Закрываем другие панели
+						panel.classList.add('open')
+						overlay.classList.add('active')
+					}
+				}
+			}
+
+			/**
+			 * Закрыть панель настроек
+			 */
+			function closeSettingsPanel() {
+				const panel = document.getElementById('legendPanel')
+				const overlay = document.getElementById('panelOverlay')
+				
+				if (panel) {
+					panel.classList.remove('open')
+				}
+				if (overlay) {
+					overlay.classList.remove('active')
+				}
+			}
+
+			/**
+			 * Открыть/закрыть панель пользователя
+			 */
+			function toggleUserPanel() {
+				const panel = document.getElementById('userPanel')
+				const overlay = document.getElementById('panelOverlay')
+				
+				if (panel && overlay) {
+					if (panel.style.display === 'none') {
+						panel.style.display = 'block'
+					}
+					
+					if (panel.classList.contains('open')) {
+						closeUserPanel()
+					} else {
+						closeAllPanels() // Закрываем другие панели
+						panel.classList.add('open')
+						overlay.classList.add('active')
+					}
+				}
+			}
+
+			/**
+			 * Закрыть панель пользователя
+			 */
+			function closeUserPanel() {
+				const panel = document.getElementById('userPanel')
+				const overlay = document.getElementById('panelOverlay')
+				
+				if (panel) {
+					panel.classList.remove('open')
+				}
+				if (overlay) {
+					overlay.classList.remove('active')
+				}
+			}
+
+			/**
+			 * Закрыть все панели
+			 */
+			function closeAllPanels() {
+				closeSettingsPanel()
+				closeUserPanel()
+			}
+
+			// Закрытие панелей при клике на overlay
+			document.addEventListener('DOMContentLoaded', function() {
+				const overlay = document.getElementById('panelOverlay')
+				if (overlay) {
+					overlay.addEventListener('click', closeAllPanels)
+				}
+			})
 
 			// Инициализация карты
 			ymaps.ready(function () {
