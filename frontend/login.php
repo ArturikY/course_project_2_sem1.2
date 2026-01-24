@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация - Анализ ДТП</title>
+    <title>Вход - Анализ ДТП</title>
     <style>
         * {
             margin: 0;
@@ -68,13 +68,6 @@
             border-color: #667eea;
         }
         
-        .form-group small {
-            display: block;
-            color: #999;
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
-        }
-        
         .btn {
             width: 100%;
             padding: 0.75rem;
@@ -91,6 +84,15 @@
         
         .btn:hover {
             background: #27ae60;
+        }
+        
+        .btn-secondary {
+            background: #95a5a6;
+            margin-bottom: 0.75rem;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
         }
         
         .btn-link {
@@ -139,30 +141,23 @@
 </head>
 <body>
     <div class="auth-container">
-        <h1>📝 Регистрация</h1>
-        <p>Создайте аккаунт для сохранения истории маршрутов</p>
+        <h1>🔐 Вход</h1>
+        <p>Войдите в систему для сохранения истории маршрутов</p>
         
         <div class="error" id="error"></div>
         
-        <form id="registerForm">
+        <form id="loginForm">
             <div class="form-group">
                 <label for="login">Логин</label>
-                <input type="text" id="login" name="login" required autocomplete="username" minlength="3" maxlength="50">
-                <small>От 3 до 50 символов</small>
+                <input type="text" id="login" name="login" required autocomplete="username">
             </div>
             
             <div class="form-group">
                 <label for="password">Пароль</label>
-                <input type="password" id="password" name="password" required autocomplete="new-password" minlength="6">
-                <small>Не менее 6 символов</small>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
             </div>
             
-            <div class="form-group">
-                <label for="passwordConfirm">Подтвердите пароль</label>
-                <input type="password" id="passwordConfirm" name="passwordConfirm" required autocomplete="new-password">
-            </div>
-            
-            <button type="submit" class="btn">Зарегистрироваться</button>
+            <button type="submit" class="btn">Войти</button>
         </form>
         
         <button type="button" class="btn btn-link" onclick="window.location.href='index.html'">
@@ -170,48 +165,32 @@
         </button>
         
         <div class="links">
-            <a href="login.php">Уже есть аккаунт? Войти</a>
+            <a href="register.php">Нет аккаунта? Зарегистрироваться</a>
         </div>
     </div>
     
     <script>
-        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const login = document.getElementById('login').value.trim();
             const password = document.getElementById('password').value;
-            const passwordConfirm = document.getElementById('passwordConfirm').value;
             const errorDiv = document.getElementById('error');
             
             errorDiv.classList.remove('show');
             
-            if (!login || !password || !passwordConfirm) {
+            if (!login || !password) {
                 showError('Заполните все поля');
-                return;
-            }
-            
-            if (login.length < 3 || login.length > 50) {
-                showError('Логин должен быть от 3 до 50 символов');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showError('Пароль должен быть не менее 6 символов');
-                return;
-            }
-            
-            if (password !== passwordConfirm) {
-                showError('Пароли не совпадают');
                 return;
             }
             
             try {
                 const formData = new FormData();
-                formData.append('action', 'register');
+                formData.append('action', 'login');
                 formData.append('login', login);
                 formData.append('password', password);
                 
-                const response = await fetch('api/auth.php?action=register', {
+                const response = await fetch('../backend/auth.php?action=login', {
                     method: 'POST',
                     body: formData,
                     credentials: 'include'
@@ -223,11 +202,11 @@
                     // Перенаправляем на главную страницу
                     window.location.href = 'index.html';
                 } else {
-                    showError(data.error || 'Ошибка регистрации');
+                    showError(data.error || 'Ошибка входа');
                 }
             } catch (error) {
                 showError('Ошибка соединения с сервером');
-                console.error('Register error:', error);
+                console.error('Login error:', error);
             }
         });
         

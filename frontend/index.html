@@ -1081,7 +1081,7 @@
 			async function checkAuth() {
 				try {
 					console.log('🔍 Проверка авторизации...')
-					const response = await fetch('api/auth.php?action=check', {
+					const response = await fetch('../backend/auth.php?action=check', {
 						credentials: 'include'
 					})
 					const data = await response.json()
@@ -1175,7 +1175,7 @@
 			 */
 			async function logout() {
 				try {
-					await fetch('api/auth.php?action=logout', {
+					await fetch('../backend/auth.php?action=logout', {
 						method: 'POST',
 						credentials: 'include'
 					})
@@ -1201,7 +1201,7 @@
 
 				try {
 					console.log('📡 Запрос истории маршрутов...')
-					const response = await fetch('api/route_history.php?limit=5', {
+					const response = await fetch('../backend/route_history.php?limit=5', {
 						credentials: 'include'
 					})
 					
@@ -1233,9 +1233,9 @@
 				
 				if (!from || !to) {
 					console.warn('⚠️ Не указаны адреса маршрута')
-					return
-				}
-				
+														return
+													}
+
 				if (!currentUser) {
 					console.log('ℹ️ Пользователь не авторизован, история не сохраняется')
 					return
@@ -1247,7 +1247,7 @@
 					formData.append('to', to)
 					
 					console.log('📡 Отправка запроса на сохранение маршрута в историю...')
-					const response = await fetch('api/route_history.php', {
+					const response = await fetch('../backend/route_history.php', {
 						method: 'POST',
 						body: formData,
 						credentials: 'include'
@@ -1279,7 +1279,7 @@
 				if (!currentUser) return
 
 				try {
-					const response = await fetch(`api/route_history.php?id=${routeId}`, {
+					const response = await fetch(`../backend/route_history.php?id=${routeId}`, {
 						method: 'DELETE',
 						credentials: 'include'
 					})
@@ -1303,14 +1303,14 @@
 				const historyList = document.getElementById('routeHistoryList')
 				if (!historyList) {
 					console.warn('⚠️ Элемент routeHistoryList не найден')
-					return
-				}
+										return
+									}
 
 				if (!currentUser) {
 					console.log('ℹ️ Пользователь не авторизован, показываем приглашение')
 					historyList.innerHTML = '<div class="route-history-empty">Войдите для просмотра истории</div>'
-					return
-				}
+										return
+									}
 
 				console.log('📡 Загрузка истории для пользователя:', currentUser.login)
 				const history = await getRouteHistory()
@@ -1319,8 +1319,8 @@
 				if (history.length === 0) {
 					console.log('ℹ️ История пуста')
 					historyList.innerHTML = '<div class="route-history-empty">История пуста</div>'
-					return
-				}
+										return
+									}
 
 				console.log(`✅ Отображение ${history.length} маршрутов в истории`)
 				let html = ''
@@ -1420,7 +1420,7 @@
 				if (panel && overlay) {
 					if (panel.classList.contains('open')) {
 						closeSettingsPanel()
-					} else {
+										} else {
 						closeAllPanels() // Закрываем другие панели
 						panel.classList.add('open')
 						overlay.classList.add('active')
@@ -1472,7 +1472,7 @@
 				const panel = document.getElementById('userPanel')
 				const overlay = document.getElementById('panelOverlay')
 				
-				if (panel) {
+									if (panel) {
 					panel.classList.remove('open')
 				}
 				if (overlay) {
@@ -1516,7 +1516,7 @@
 					?.src.match(/apikey=([^&\s]+)/)?.[1]
 
 				if (!apiKey || apiKey === 'ВАШ_API_КЛЮЧ') {
-					console.warn(
+							console.warn(
 						'⚠️ API ключ Яндекс.Карт не настроен! Замените ВАШ_API_КЛЮЧ на реальный ключ в строке 491 index.html'
 					)
 					alert(
@@ -1711,7 +1711,7 @@
 					})
 
 					const response = await fetch(
-						`api/hotspots.php?bbox=${encodeURIComponent(bbox)}&period=${period}&threshold=${threshold}&grid=${gridSize}`
+						`../backend/hotspots.php?bbox=${encodeURIComponent(bbox)}&period=${period}&threshold=${threshold}&grid=${gridSize}`
 					)
 
 					// Проверяем, что ответ действительно JSON
@@ -1913,7 +1913,7 @@
 					const bboxStr = `${bbox.minLon},${bbox.minLat},${bbox.maxLon},${bbox.maxLat}`
 
 					const response = await fetch(
-						`api/accidents.php?bbox=${encodeURIComponent(bboxStr)}&limit=1000`
+						`../backend/accidents.php?bbox=${encodeURIComponent(bboxStr)}&limit=1000`
 					)
 					if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
@@ -1994,7 +1994,7 @@
 
 				try {
 					const response = await fetch(
-						`api/accidents.php?bbox=${encodeURIComponent(bbox)}&limit=${maxPoints}`
+						`../backend/accidents.php?bbox=${encodeURIComponent(bbox)}&limit=${maxPoints}`
 					)
 					if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
@@ -2073,7 +2073,7 @@
 				try {
 					// Сбрасываем кэш через API
 					const response = await fetch(
-						'api/hotspots.php?bbox=37.0,55.5,38.0,56.0&period=all&threshold=5&grid=1000&reset_cache=1'
+						'../backend/hotspots.php?bbox=37.0,55.5,38.0,56.0&period=all&threshold=5&grid=1000&reset_cache=1'
 					)
 					if (!response.ok) throw new Error(`HTTP ${response.status}`)
 

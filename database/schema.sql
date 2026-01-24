@@ -51,3 +51,4 @@ SELECT
   id, dt, lat, lon, geom, category, severity, region, light, address
 FROM accidents
 WHERE dt >= DATE_SUB(NOW(), INTERVAL 90 DAY);
+
